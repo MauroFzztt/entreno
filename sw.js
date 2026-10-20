@@ -1,4 +1,4 @@
-const CACHE = 'entreno-202610172152';
+const CACHE = 'entreno-202610201125';
 const FILES = ['./', 'index.html', 'manifest.json', 'icon-192.png', 'icon-512.png', 'support.js',
   'vendor/react.production.min.js', 'vendor/react-dom.production.min.js', 'vendor/fonts.css',
   'vendor/SpaceGrotesk-1.woff2', 'vendor/SpaceGrotesk-2.woff2', 'vendor/SpaceGrotesk-3.woff2',

@@ -41,130 +41,150 @@ setInterval(function(){ if (!document.querySelector('link[rel=manifest]')) { var
 <div style="width:100%;max-width:480px;min-height:100vh;display:flex;flex-direction:column;position:relative">
 
 <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
-  <main data-screen-label="Inicio" style="flex:1;display:flex;flex-direction:column;gap:18px;padding:16px 14px 40px">
-    <header style="display:grid;grid-template-columns:72px minmax(0,1fr) 72px;align-items:center;gap:8px;padding:4px 0">
-      <span style="justify-self:start;padding:5px 10px;background:#111;border:1px solid #333;border-radius:4px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.14em;color:#bbb">{{ todayDow }}</span>
+  <main data-screen-label="Inicio" style="flex:1;display:flex;flex-direction:column;gap:20px;padding:16px 14px 40px">
+    <header style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:8px">
+      <span style="justify-self:start;padding:6px 10px;background:#111;border:1px solid #333;border-radius:10px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.1em;color:#bbb;white-space:nowrap">{{ todayTxt }}</span>
       <h1 style="margin:0;text-align:center;font-family:'Space Mono',monospace;font-size:19px;font-weight:700;letter-spacing:.22em">ENTRENO</h1>
-      <span style="justify-self:end;padding:5px 10px;background:#111;border:1px solid #333;border-radius:4px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.1em;color:#bbb">{{ todayDate }}</span>
+      <div style="justify-self:end;position:relative">
+        <button onClick="{{ toggleMenu }}" aria-label="Más opciones" style="width:44px;height:44px;border-radius:10px;border:1px solid #333;background:#111;color:#ccc;display:flex;align-items:center;justify-content:center;cursor:pointer">
+          <svg width="20" height="20" viewBox="0 0 24 24" style="fill:currentColor"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg>
+        </button>
+        <sc-if value="{{ menuOpen }}">
+          <div style="position:absolute;right:0;top:52px;z-index:21;min-width:200px;padding:6px;background:#111;border:1px solid #333;border-radius:16px;box-shadow:0 10px 28px rgba(0,0,0,.5);display:flex;flex-direction:column">
+            <button onClick="{{ goEdit }}" style="height:48px;padding:0 12px;border:0;border-radius:10px;background:transparent;text-align:left;font-size:16px;font-weight:500;display:flex;align-items:center;gap:10px;cursor:pointer">
+              <svg width="18" height="18" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M4 20h4L19 9l-4-4L4 16v4zM13 7l4 4"></path></svg>
+              <span>Editar rutina</span>
+            </button>
+          </div>
+        </sc-if>
+      </div>
     </header>
+    <sc-if value="{{ menuOpen }}">
+      <button onClick="{{ toggleMenu }}" aria-label="Cerrar menú" style="position:fixed;inset:0;z-index:20;border:0;background:transparent;cursor:default"></button>
+    </sc-if>
 
-    <section style="background:#FF3D0A;color:#111;border-radius:14px;padding:16px 16px 14px;display:flex;flex-direction:column;gap:14px">
+    <section style="background:#FF3D0A;color:#111;border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:14px">
       <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px">
         <span style="font-family:'Space Mono',monospace;font-size:15px;font-weight:700;letter-spacing:.14em">{{ nextLabel }}</span>
         <span style="font-family:'Space Mono',monospace;font-size:12px;color:#5a1300;text-align:right">{{ cornerTxt }}</span>
       </div>
-      <div style="display:flex;align-items:flex-start;gap:10px;margin-top:-6px">
-        <span style="font-family:'Space Mono',monospace;font-size:112px;line-height:.92;letter-spacing:-.04em">{{ nextNum }}</span>
-        <div style="display:flex;flex-direction:column;gap:4px;padding-top:10px">
+      <div style="display:flex;align-items:flex-start;gap:12px;margin-top:-6px">
+        <span style="font-family:'Space Mono',monospace;font-size:104px;line-height:.92;letter-spacing:-.04em">{{ nextNum }}</span>
+        <div style="display:flex;flex-direction:column;gap:4px;padding-top:12px">
           <span style="font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.14em;color:#5a1300">SESIÓN</span>
           <span style="font-size:22px;font-weight:600;line-height:1.1;letter-spacing:-.01em;text-wrap:pretty">{{ nextFocus }}</span>
         </div>
       </div>
       <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
-        <div style="display:flex;flex-direction:column;gap:3px">
-          <span style="font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:.12em;color:#5a1300">EJERCICIOS</span>
+        <div style="display:flex;flex-direction:column;gap:3px;min-width:0">
+          <span style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.06em;color:#5a1300">{{ stat1Label }}</span>
           <span style="font-size:22px;font-weight:600">{{ nextExCount }}</span>
         </div>
-        <div style="display:flex;flex-direction:column;gap:3px">
-          <span style="font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:.12em;color:#5a1300">SERIES</span>
+        <div style="display:flex;flex-direction:column;gap:3px;min-width:0">
+          <span style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.06em;color:#5a1300">SERIES</span>
           <span style="font-size:22px;font-weight:600">{{ nextSets }}</span>
         </div>
-        <div style="display:flex;flex-direction:column;gap:3px">
-          <span style="font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:.12em;color:#5a1300">ÚLTIMA VEZ</span>
+        <div style="display:flex;flex-direction:column;gap:3px;min-width:0">
+          <span style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.06em;color:#5a1300">{{ stat3Label }}</span>
           <span style="font-size:22px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ nextLast }}</span>
         </div>
       </div>
-
-      <div style="background:#8E9BA5;border-radius:6px;padding:10px 10px 8px;display:flex;flex-direction:column;gap:8px;border:2px solid #d9330a">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <span style="font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:.12em;color:#1d2328">ESTA SEMANA</span>
-          <span style="padding:2px 8px;border:1px solid #3d474f;border-radius:10px;font-family:'Space Mono',monospace;font-size:10.5px;color:#1d2328">{{ weekCount }}</span>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px">
-          <sc-for list="{{ week }}" as="d" hint-placeholder-count="7">
-            <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
-              <div style="width:100%;height:38px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:12.5px;font-weight:700;background:{{ d.bg }};color:{{ d.color }};border:1.5px {{ d.bstyle }} {{ d.border }}">{{ d.label }}</div>
-              <span style="font-family:'Space Mono',monospace;font-size:10px;color:#1d2328">{{ d.letter }}</span>
-            </div>
-          </sc-for>
-        </div>
-      </div>
-
       <button onClick="{{ startNext }}" style="height:56px;border:0;border-radius:28px;background:#111;color:#FF3D0A;font-family:'Space Mono',monospace;font-size:15px;font-weight:700;letter-spacing:.14em;display:flex;align-items:center;justify-content:center;gap:12px;cursor:pointer">
         <span>{{ nextCta }}</span>
         <svg width="20" height="20" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
       </button>
     </section>
 
-    <section style="display:flex;flex-direction:column;gap:10px;margin-top:6px">
+    <section style="display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:0 2px">
+        <span style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.14em;color:#9a9a9a">ESTA SEMANA</span>
+        <span style="font-family:'Space Mono',monospace;font-size:12px;color:#bbb">{{ weekCount }}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px">
+        <sc-for list="{{ week }}" as="d" hint-placeholder-count="7">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+            <div style="width:100%;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:13px;font-weight:700;background:{{ d.bg }};color:{{ d.color }};border:1.5px {{ d.bstyle }} {{ d.border }}">{{ d.label }}</div>
+            <span style="font-family:'Space Mono',monospace;font-size:12px;color:{{ d.letterColor }}">{{ d.letter }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:0 2px">
         <h2 style="margin:0;font-family:'Space Mono',monospace;font-size:17px;font-weight:700;letter-spacing:.2em">SESIONES</h2>
-        <div style="display:flex;gap:6px">
-          <button onClick="{{ goEdit }}" style="height:36px;padding:0 10px;border:1.5px solid #4a4a4a;border-radius:6px;background:#111;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.12em;color:#ccc;cursor:pointer">EDITAR</button>
-          <button onClick="{{ goHistory }}" style="height:36px;padding:0 10px;border:1.5px solid #4a4a4a;border-radius:6px;background:#111;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.12em;color:#ccc;cursor:pointer">HISTORIAL</button>
-        </div>
+        <button onClick="{{ goHistory }}" style="height:44px;padding:0 14px;border:1.5px solid #4a4a4a;border-radius:22px;background:#111;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.12em;color:#ccc;cursor:pointer">HISTORIAL</button>
       </div>
       <sc-for list="{{ sessions }}" as="row" hint-placeholder-count="4">
-        <button onClick="{{ row.onOpen }}" style="width:100%;display:flex;align-items:center;gap:12px;padding:8px;border:1px solid #2c2c2c;border-radius:44px;background:#111;text-align:left;cursor:pointer;box-shadow:inset 0 1px 0 #262626">
-          <span style="flex:none;width:68px;height:68px;border-radius:50%;background:#252525;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:{{ row.numColor }}">{{ row.num }}</span>
-          <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px">
-            <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.1em;color:#9a9a9a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ row.focus }}</span>
-            <span style="font-size:19px;font-weight:600;line-height:1.15;letter-spacing:-.01em;text-wrap:pretty">{{ row.title }}</span>
+        <button onClick="{{ row.onOpen }}" style="width:100%;display:flex;align-items:center;gap:12px;padding:8px;border:1px solid #2c2c2c;border-radius:20px;background:#111;text-align:left;cursor:pointer">
+          <span style="flex:none;width:64px;height:64px;border-radius:12px;background:#252525;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:{{ row.numColor }}">{{ row.num }}</span>
+          <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
+            <span style="font-size:18px;font-weight:600;line-height:1.15;letter-spacing:-.01em;text-wrap:pretty">{{ row.title }}</span>
+            <span style="font-family:'Space Mono',monospace;font-size:12px;color:#9a9a9a">{{ row.focus }}</span>
           </span>
-          <span style="flex:none;width:112px;height:66px;margin-right:6px;border-radius:6px;background:#8E9BA5;color:#1d2328;padding:6px 8px;display:flex;flex-direction:column;justify-content:space-between">
-            <span style="font-family:'Space Mono',monospace;font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ row.lastTxt }}</span>
-            <span style="display:flex;gap:5px;align-items:center;height:14px">
+          <span style="flex:none;min-width:84px;margin-right:6px;display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+            <span style="font-size:13px;font-weight:500;white-space:nowrap;color:{{ row.lastColor }}">{{ row.lastTxt }}</span>
+            <span style="display:flex;gap:5px;align-items:center">
               <sc-for list="{{ row.dots }}" as="dot" hint-placeholder-count="6">
-                <span style="flex:none;width:8px;height:8px;border-radius:50%;background:{{ dot.bg }};border:1.5px solid #1d2328"></span>
+                <span style="flex:none;width:8px;height:8px;border-radius:50%;background:{{ dot.bg }};border:1.5px solid {{ dot.border }}"></span>
               </sc-for>
             </span>
-            <span style="align-self:flex-end;font-family:'Space Mono',monospace;font-size:11px;font-weight:700">{{ row.score }}</span>
           </span>
         </button>
       </sc-for>
     </section>
 
-    <section style="display:flex;flex-direction:column;gap:10px;margin-top:6px">
+    <section style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
       <div style="display:flex;justify-content:space-between;align-items:center;padding:0 2px">
         <h2 style="margin:0;font-family:'Space Mono',monospace;font-size:17px;font-weight:700;letter-spacing:.2em">PESO CORPORAL</h2>
-        <span style="padding:5px 10px;background:#111;border:1px solid {{ bodyTagColor }};border-radius:4px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.1em;white-space:nowrap;color:{{ bodyTagColor }}">{{ bodyTag }}</span>
+        <span style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.08em;white-space:nowrap;color:{{ bodyTagColor }}">{{ bodyTag }}</span>
       </div>
-      <div style="background:#111;border:1px solid #2c2c2c;border-radius:24px;padding:14px;display:flex;flex-direction:column;gap:14px;box-shadow:inset 0 1px 0 #262626">
-        <div style="display:flex;align-items:center;gap:12px">
-          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;padding-left:4px">
-            <span style="font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:.12em;color:#9a9a9a">{{ bodyLabel }}</span>
-            <span style="display:flex;align-items:baseline;gap:4px">
+      <div style="background:#111;border:1px solid #2c2c2c;border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px">
+          <div style="display:flex;flex-direction:column;gap:4px;min-width:0">
+            <span style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.08em;color:#9a9a9a">{{ bodyLabel }}</span>
+            <span style="display:flex;align-items:baseline;gap:6px">
               <span style="font-size:40px;font-weight:600;letter-spacing:-.02em;line-height:1">{{ bodyKg }}</span>
-              <span style="font-family:'Space Mono',monospace;font-size:12px;color:#9a9a9a">KG</span>
+              <span style="font-family:'Space Mono',monospace;font-size:13px;color:#9a9a9a">kg</span>
             </span>
-            <span style="font-family:'Space Mono',monospace;font-size:11px;color:#9a9a9a">{{ bodyDelta }}</span>
           </div>
-          <sc-if value="{{ bodyHasChart }}">
-            <div style="flex:none;position:relative;width:132px;height:78px;border-radius:6px;background:#8E9BA5;padding:8px 8px 18px">
-              <svg viewBox="0 0 120 50" preserveAspectRatio="none" style="width:100%;height:100%;display:block;overflow:visible">
-                <line x1="0" y1="25" x2="120" y2="25" style="stroke:#6f7b84;stroke-width:1;vector-effect:non-scaling-stroke"></line>
-                <polyline points="{{ bodyPts }}" style="fill:none;stroke:#111;stroke-width:2;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke"></polyline>
-              </svg>
-              <span style="position:absolute;left:8px;right:8px;bottom:4px;display:flex;justify-content:space-between;font-family:'Space Mono',monospace;font-size:9.5px;color:#1d2328">
-                <span>{{ bodyFrom }}</span><span>{{ bodyTo }}</span>
-              </span>
-            </div>
-          </sc-if>
+          <span style="font-size:14px;color:#bbb;text-align:right;padding-bottom:4px">{{ bodyDelta }}</span>
         </div>
+        <sc-if value="{{ bodyHasChart }}">
+          <div style="position:relative;height:96px;border-radius:12px;background:#1a1a1a;border:1px solid #2c2c2c">
+            <div style="position:absolute;left:14px;right:14px;top:14px;bottom:32px">
+              <svg viewBox="0 0 300 60" preserveAspectRatio="none" style="width:100%;height:100%;display:block;overflow:visible">
+                <line x1="0" y1="30" x2="300" y2="30" style="stroke:#333;stroke-width:1;stroke-dasharray:3 3;vector-effect:non-scaling-stroke"></line>
+                <polyline points="{{ bodyPts }}" style="fill:none;stroke:#F2F2F2;stroke-width:2;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke"></polyline>
+              </svg>
+              <span style="position:absolute;left:{{ bodyX }};top:{{ bodyY }};width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:#FF3D0A"></span>
+            </div>
+            <span style="position:absolute;left:14px;right:14px;bottom:8px;display:flex;justify-content:space-between;font-family:'Space Mono',monospace;font-size:12px;color:#9a9a9a">
+              <span>{{ bodyFrom }}</span><span>{{ bodyTo }}</span>
+            </span>
+          </div>
+        </sc-if>
         <sc-if value="{{ bodyShowInput }}">
           <div style="display:grid;grid-template-columns:48px minmax(0,1fr) 48px auto;gap:6px;align-items:center">
             <button onClick="{{ bodyMinus }}" aria-label="Menos" style="height:48px;border-radius:24px;border:1px solid #333;background:#252525;display:flex;align-items:center;justify-content:center;cursor:pointer">
               <svg width="18" height="18" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round"><path d="M5 12h14"></path></svg>
             </button>
-            <input value="{{ bodyInput }}" onChange="{{ bodyChange }}" inputmode="decimal" placeholder="Tu peso" aria-label="Peso corporal" style="width:100%;height:48px;border-radius:6px;border:0;background:#8E9BA5;color:#111;text-align:center;font-family:'Space Mono',monospace;font-size:20px;font-weight:700;padding:0 6px">
+            <input value="{{ bodyInput }}" onChange="{{ bodyChange }}" inputmode="decimal" placeholder="Tu peso" aria-label="Peso corporal" style="width:100%;height:48px;border-radius:10px;border:1.5px solid #4a4a4a;background:#1a1a1a;color:#F2F2F2;text-align:center;font-family:'Space Mono',monospace;font-size:20px;font-weight:700;padding:0 6px">
             <button onClick="{{ bodyPlus }}" aria-label="Más" style="height:48px;border-radius:24px;border:1px solid #333;background:#252525;display:flex;align-items:center;justify-content:center;cursor:pointer">
               <svg width="18" height="18" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round"><path d="M12 5v14M5 12h14"></path></svg>
             </button>
-            <button onClick="{{ bodySave }}" style="height:48px;padding:0 14px;border:0;border-radius:24px;background:#FF3D0A;color:#111;font-family:'Space Mono',monospace;font-size:12.5px;font-weight:700;letter-spacing:.1em;cursor:pointer">GUARDAR</button>
+            <button onClick="{{ bodySave }}" style="height:48px;padding:0 14px;border:0;border-radius:24px;background:#FF3D0A;color:#111;font-family:'Space Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.1em;cursor:pointer">GUARDAR</button>
           </div>
+          <button onClick="{{ bodyCancel }}" style="align-self:flex-start;min-height:44px;border:0;background:transparent;padding:0 4px;font-size:14px;color:#9a9a9a;text-decoration:underline;cursor:pointer">Cancelar</button>
+        </sc-if>
+        <sc-if value="{{ bodyShowAdd }}">
+          <button onClick="{{ bodyOpen }}" style="height:48px;border-radius:24px;border:1.5px dashed #555;background:transparent;color:#ccc;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.08em;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer">
+            <svg width="14" height="14" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round"><path d="M12 5v14M5 12h14"></path></svg>
+            <span>REGISTRAR PESO DE ESTA SEMANA</span>
+          </button>
         </sc-if>
         <sc-if value="{{ bodyShowEdit }}">
-          <button onClick="{{ bodyOpen }}" style="align-self:flex-start;border:0;background:transparent;padding:2px 4px;font-size:13px;white-space:nowrap;color:#9a9a9a;text-decoration:underline;cursor:pointer">Corregir el de esta semana</button>
+          <button onClick="{{ bodyOpen }}" style="align-self:flex-start;min-height:44px;border:0;background:transparent;padding:0 4px;font-size:14px;white-space:nowrap;color:#9a9a9a;text-decoration:underline;cursor:pointer">Corregir el de esta semana</button>
         </sc-if>
       </div>
     </section>
@@ -173,66 +193,65 @@ setInterval(function(){ if (!document.querySelector('link[rel=manifest]')) { var
 
 <sc-if value="{{ isSession }}" hint-placeholder-val="{{ false }}">
   <main data-screen-label="Sesión" style="flex:1;display:flex;flex-direction:column">
-    <header style="position:sticky;top:0;z-index:5;background:#1c1c1c;padding:16px 14px 10px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:8px">
-      <button onClick="{{ goHome }}" aria-label="Volver" style="justify-self:start;height:36px;padding:0 10px;background:#111;border:1px solid #333;border-radius:4px;display:flex;align-items:center;gap:4px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.12em;color:#bbb;cursor:pointer">
-        <svg width="14" height="14" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"><path d="M15 5l-7 7 7 7"></path></svg>
-        <span>VOLVER</span>
-      </button>
-      <h1 style="margin:0;text-align:center;font-family:'Space Mono',monospace;font-size:19px;font-weight:700;letter-spacing:.22em">{{ sTitle }}</h1>
-      <span style="justify-self:end;padding:5px 10px;background:#111;border:1px solid #333;border-radius:4px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.1em;color:#bbb">{{ sDone }}/{{ sTotal }}</span>
+    <header style="position:sticky;top:0;z-index:5;background:#1c1c1c;border-bottom:1px solid #2c2c2c;padding:12px 14px;display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:12px">
+        <button onClick="{{ goHome }}" aria-label="Volver" style="flex:none;width:44px;height:44px;border-radius:10px;background:#111;border:1px solid #333;display:flex;align-items:center;justify-content:center;color:#ccc;cursor:pointer">
+          <svg width="18" height="18" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"><path d="M15 5l-7 7 7 7"></path></svg>
+        </button>
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+          <span style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.08em;color:#9a9a9a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ sMeta }}</span>
+          <span style="font-size:19px;font-weight:600;line-height:1.15;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ sFocus }}</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="flex:1;display:flex;gap:4px">
+          <sc-for list="{{ segs }}" as="g" hint-placeholder-count="6">
+            <span style="flex:1;height:8px;border-radius:4px;background:{{ g.bg }};border:1.5px solid {{ g.border }};transition:background .2s"></span>
+          </sc-for>
+        </div>
+        <span style="flex:none;font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:#F2F2F2">{{ sCount }}</span>
+      </div>
     </header>
 
-    <div style="flex:1;display:flex;flex-direction:column;gap:10px;padding:6px 14px 12px">
-      <section style="background:#FF3D0A;color:#111;border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:12px;margin-bottom:6px">
-        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px">
-          <span style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;letter-spacing:.14em">{{ sFocus }}</span>
-          <span style="font-family:'Space Mono',monospace;font-size:12px;color:#5a1300">{{ sLastTxt }}</span>
-        </div>
-        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px">
-          <span style="font-family:'Space Mono',monospace;font-size:64px;line-height:.9;letter-spacing:-.04em">{{ sDone }}<span style="font-size:30px;color:#5a1300">/{{ sTotal }}</span></span>
-          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;padding-bottom:4px">
-            <span style="font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:.12em;color:#5a1300">SERIES</span>
-            <span style="font-size:22px;font-weight:600">{{ sSets }}</span>
-          </div>
-        </div>
-        <div style="height:10px;background:#8E9BA5;border-radius:3px;overflow:hidden;border:1.5px solid #d9330a">
-          <div style="height:100%;width:{{ sPct }};background:#111;transition:width .3s"></div>
-        </div>
-      </section>
-
+    <div style="flex:1;display:flex;flex-direction:column;gap:10px;padding:12px 14px">
       <sc-if value="{{ sEmpty }}">
-        <p style="margin:0;padding:12px 4px;color:#9a9a9a;font-size:15px;line-height:1.5">Esta sesión no tiene ejercicios. Agregalos desde EDITAR en el inicio.</p>
+        <p style="margin:0;padding:12px 4px;color:#9a9a9a;font-size:15px;line-height:1.5">Esta sesión no tiene ejercicios. Agregalos desde Editar rutina, en el menú del inicio.</p>
       </sc-if>
 
       <sc-for list="{{ exercises }}" as="ex" hint-placeholder-count="6">
-        <article style="background:#111;border:1px solid {{ ex.border }};border-radius:{{ ex.radius }};overflow:hidden;box-shadow:inset 0 1px 0 #262626">
-          <div style="display:flex;align-items:center;gap:10px;padding:8px">
-            <button onClick="{{ ex.onCheck }}" aria-label="Marcar ejercicio" style="flex:none;width:64px;height:64px;border-radius:50%;border:0;padding:0;background:#252525;cursor:pointer;display:flex;align-items:center;justify-content:center">
+        <article style="background:{{ ex.bg }};border:1.5px solid {{ ex.border }};border-radius:20px;overflow:hidden;transition:background .2s, border-color .2s">
+          <div style="display:flex;align-items:center;gap:12px;padding:8px">
+            <button onClick="{{ ex.onCheck }}" aria-label="Marcar ejercicio" style="flex:none;width:64px;height:64px;border-radius:12px;border:0;padding:0;background:#252525;cursor:pointer;display:flex;align-items:center;justify-content:center">
               <sc-if value="{{ ex.done }}">
-                <span style="width:64px;height:64px;border-radius:50%;background:#FF3D0A;color:#111;display:flex;align-items:center;justify-content:center">
+                <span style="width:64px;height:64px;border-radius:12px;background:#FF3D0A;color:#111;display:flex;align-items:center;justify-content:center">
                   <svg width="26" height="26" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
                 </span>
               </sc-if>
               <sc-if value="{{ ex.partial }}">
-                <span style="width:48px;height:48px;border-radius:50%;border:2.5px solid #FF3D0A;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:#FF3D0A">{{ ex.countTxt }}</span>
+                <span style="width:64px;height:64px;border-radius:12px;border:2.5px solid #FF3D0A;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:#FF3D0A">{{ ex.countTxt }}</span>
               </sc-if>
               <sc-if value="{{ ex.none }}">
-                <span style="width:48px;height:48px;border-radius:50%;border:2px solid #444;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:12px;color:#888">{{ ex.idx }}</span>
+                <span style="width:64px;height:64px;border-radius:12px;border:2px solid {{ ex.ring }};display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:14px;color:{{ ex.ring }}">{{ ex.idx }}</span>
               </sc-if>
             </button>
             <button onClick="{{ ex.onOpen }}" style="flex:1;min-width:0;display:flex;align-items:center;gap:10px;border:0;background:transparent;padding:0;text-align:left;cursor:pointer">
-              <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;padding:6px 0">
-                <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.08em;color:#9a9a9a">{{ ex.meta }}</span>
-                <span style="font-size:15px;font-weight:600;line-height:1.2;letter-spacing:.01em;text-wrap:pretty;color:{{ ex.nameColor }}">{{ ex.name }}</span>
+              <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;padding:4px 0">
+                <span style="font-size:17px;font-weight:600;line-height:1.2;text-wrap:pretty;color:{{ ex.nameColor }}">{{ ex.name }}</span>
+                <span style="display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;font-family:'Space Mono',monospace;font-size:12px">
+                  <span style="color:{{ ex.metaColor }}">{{ ex.scheme }}</span>
+                  <sc-if value="{{ ex.hasPrev }}">
+                    <span style="font-weight:700;white-space:nowrap;color:{{ ex.prevColor }}">{{ ex.prevTxt }}</span>
+                  </sc-if>
+                </span>
                 <sc-if value="{{ ex.hasNote }}">
-                  <span style="font-family:'Space Mono',monospace;font-size:11px;line-height:1.35;color:#FF3D0A">{{ ex.note }}</span>
+                  <span style="font-size:13px;line-height:1.35;color:#ff8a66">{{ ex.note }}</span>
                 </sc-if>
               </span>
-              <span style="flex:none;width:86px;height:64px;margin-right:8px;border-radius:6px;background:#8E9BA5;color:#1d2328;padding:6px 8px;display:flex;flex-direction:column;justify-content:space-between">
-                <span style="font-family:'Space Mono',monospace;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ ex.prevTxt }}</span>
-                <span style="align-self:flex-end;display:flex;align-items:baseline;gap:2px">
-                  <span style="font-size:24px;font-weight:600;letter-spacing:-.02em;color:#111">{{ ex.kg }}</span>
-                  <span style="font-family:'Space Mono',monospace;font-size:10px">KG</span>
+              <span style="flex:none;width:100px;height:64px;border-radius:12px;opacity:{{ ex.panelOp }};transition:opacity .2s;background:#8E9BA5;color:#1d2328;padding:7px 10px;display:flex;flex-direction:column;justify-content:space-between">
+                <span style="font-family:'Space Mono',monospace;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ ex.equip }}</span>
+                <span style="align-self:flex-end;display:flex;align-items:baseline;gap:3px">
+                  <span style="font-size:24px;font-weight:600;letter-spacing:-.02em;line-height:1;color:#111">{{ ex.kg }}</span>
+                  <span style="font-family:'Space Mono',monospace;font-size:12px">kg</span>
                 </span>
               </span>
             </button>
@@ -241,141 +260,156 @@ setInterval(function(){ if (!document.querySelector('link[rel=manifest]')) { var
           <sc-if value="{{ ex.open }}">
             <div style="padding:8px 16px 20px;display:flex;flex-direction:column;gap:22px">
               <div style="display:flex;flex-direction:column;gap:10px">
-                <div style="display:flex;justify-content:space-between;align-items:center;min-height:24px">
-                  <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;color:#9a9a9a">EQUIPO</span>
-                  <sc-if value="{{ ex.canRemove }}">
-                    <button onClick="{{ ex.onRemove }}" style="border:0;background:transparent;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.06em;color:#9a9a9a;padding:4px 0;cursor:pointer;text-decoration:underline">QUITAR {{ ex.equipUp }}</button>
-                  </sc-if>
-                </div>
-                <div style="display:flex;flex-wrap:wrap;gap:8px">
-                  <sc-for list="{{ ex.chips }}" as="c" hint-placeholder-count="2">
-                    <sc-if value="{{ c.sel }}">
-                      <button onClick="{{ c.onPick }}" style="height:44px;padding:0 14px;border-radius:6px;border:1.5px solid #FF3D0A;background:#FF3D0A;color:#111;display:flex;align-items:center;gap:8px;cursor:pointer;font-family:'Space Mono',monospace;font-size:12.5px;font-weight:700;letter-spacing:.08em">
-                        <span>{{ c.label }}</span>
-                        <span style="font-weight:400">{{ c.kg }}</span>
-                      </button>
-                    </sc-if>
-                    <sc-if value="{{ c.unsel }}">
-                      <button onClick="{{ c.onPick }}" style="height:44px;padding:0 14px;border-radius:6px;border:1.5px solid #4a4a4a;background:#1a1a1a;color:#ddd;display:flex;align-items:center;gap:8px;cursor:pointer;font-family:'Space Mono',monospace;font-size:12.5px;letter-spacing:.08em">
-                        <span>{{ c.label }}</span>
-                        <span style="color:#9a9a9a">{{ c.kg }}</span>
-                      </button>
-                    </sc-if>
-                  </sc-for>
-                  <sc-if value="{{ ex.notAdding }}">
-                    <button onClick="{{ ex.onAddOpen }}" style="height:44px;padding:0 14px;border-radius:6px;border:1.5px dashed #555;background:transparent;color:#aaa;font-family:'Space Mono',monospace;font-size:12.5px;letter-spacing:.08em;display:flex;align-items:center;gap:6px;cursor:pointer">
-                      <svg width="14" height="14" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round"><path d="M12 5v14M5 12h14"></path></svg>
-                      <span>AGREGAR</span>
-                    </button>
-                  </sc-if>
-                </div>
-                <sc-if value="{{ ex.adding }}">
-                  <div style="display:flex;flex-direction:column;gap:12px;padding:12px;border-radius:10px;background:#1f1f1f;border:1px solid #2c2c2c">
-                    <div style="display:flex;flex-wrap:wrap;gap:8px">
-                      <sc-for list="{{ ex.presets }}" as="pr" hint-placeholder-count="3">
-                        <button onClick="{{ pr.onAdd }}" style="height:40px;padding:0 12px;border-radius:6px;border:1px solid #4a4a4a;background:#111;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.06em;cursor:pointer">+ {{ pr.label }}</button>
-                      </sc-for>
-                    </div>
-                    <div style="display:flex;gap:8px">
-                      <input value="{{ ex.newVar }}" onChange="{{ ex.onNewVar }}" onKeyDown="{{ ex.onNewKey }}" placeholder="Otro: Polea 2, Máquina azul…" style="flex:1;min-width:0;height:44px;border-radius:6px;border:1px solid #4a4a4a;background:#111;padding:0 12px;font-size:15px">
-                      <button onClick="{{ ex.onNewAdd }}" style="flex:none;height:44px;padding:0 14px;border:0;border-radius:6px;background:#FF3D0A;color:#111;font-family:'Space Mono',monospace;font-size:12.5px;font-weight:700;letter-spacing:.08em;cursor:pointer">OK</button>
-                    </div>
-                    <button onClick="{{ ex.onAddCancel }}" style="align-self:flex-start;border:0;background:transparent;color:#9a9a9a;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.06em;padding:2px 0;cursor:pointer;text-decoration:underline">CANCELAR</button>
-                  </div>
-                </sc-if>
-              </div>
-
-              <div style="display:flex;flex-direction:column;gap:10px">
-                <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;color:#9a9a9a">PESO · {{ ex.equipUp }}</span>
                 <div style="display:grid;grid-template-columns:64px minmax(0,1fr) 64px;gap:8px">
                   <button onClick="{{ ex.onMinus }}" aria-label="Menos peso" style="height:68px;border-radius:34px;border:1px solid #333;background:#252525;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer">
                     <svg width="22" height="22" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round"><path d="M5 12h14"></path></svg>
-                    <span style="font-family:'Space Mono',monospace;font-size:10px;color:#9a9a9a">{{ ex.stepTxt }}</span>
+                    <span style="font-family:'Space Mono',monospace;font-size:12px;color:#9a9a9a">{{ ex.stepTxt }}</span>
                   </button>
-                  <label style="position:relative;height:68px;border-radius:6px;background:#8E9BA5;color:#111;display:flex;align-items:center;justify-content:center;cursor:text">
+                  <label style="position:relative;height:68px;border-radius:12px;background:#8E9BA5;color:#111;display:flex;align-items:center;justify-content:center;cursor:text">
                     <input value="{{ ex.kgInput }}" onChange="{{ ex.onKgChange }}" onBlur="{{ ex.onKgBlur }}" onKeyDown="{{ ex.onKgKey }}" inputmode="decimal" placeholder="0" aria-label="Peso en kg" style="width:100%;border:0;background:transparent;text-align:center;font-family:'Space Mono',monospace;font-size:34px;font-weight:700;color:#111;padding:0 34px">
-                    <span style="position:absolute;right:12px;bottom:10px;font-family:'Space Mono',monospace;font-size:11px;color:#1d2328;pointer-events:none">KG</span>
+                    <span style="position:absolute;right:12px;bottom:10px;font-family:'Space Mono',monospace;font-size:12px;color:#1d2328;pointer-events:none">kg</span>
                   </label>
                   <button onClick="{{ ex.onPlus }}" aria-label="Más peso" style="height:68px;border-radius:34px;border:1px solid #333;background:#252525;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer">
                     <svg width="22" height="22" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round"><path d="M12 5v14M5 12h14"></path></svg>
-                    <span style="font-family:'Space Mono',monospace;font-size:10px;color:#9a9a9a">{{ ex.stepTxt }}</span>
+                    <span style="font-family:'Space Mono',monospace;font-size:12px;color:#9a9a9a">{{ ex.stepTxt }}</span>
                   </button>
                 </div>
-                <span style="font-size:13px;line-height:1.45;color:#9a9a9a">{{ ex.lastTxt }}</span>
+                <span style="font-size:14px;line-height:1.45;color:#9a9a9a">{{ ex.lastTxt }}</span>
               </div>
 
               <sc-if value="{{ ex.perSet }}">
                 <div style="display:flex;flex-direction:column;gap:8px">
-                  <div style="display:flex;justify-content:space-between;align-items:center">
-                    <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;color:#9a9a9a">SERIES · {{ ex.scheme }}</span>
-                    <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;color:#9a9a9a;padding-right:52px">REPS</span>
-                  </div>
+                  <sc-if value="{{ ex.showTapHint }}">
+                    <span style="font-size:14px;color:#9a9a9a">Tocá una serie para marcarla como hecha.</span>
+                  </sc-if>
                   <sc-for list="{{ ex.setsList }}" as="st" hint-placeholder-count="3">
-                    <div style="display:flex;align-items:center;gap:10px;padding:6px;border-radius:32px;background:#1a1a1a;border:1px solid #2c2c2c">
-                      <sc-if value="{{ st.on }}">
-                        <button onClick="{{ st.onTap }}" aria-label="Marcar serie" style="flex:none;width:52px;height:52px;border-radius:50%;border:0;background:#FF3D0A;color:#111;font-family:'Space Mono',monospace;font-size:17px;font-weight:700;cursor:pointer">{{ st.n }}</button>
-                      </sc-if>
-                      <sc-if value="{{ st.off }}">
-                        <button onClick="{{ st.onTap }}" aria-label="Marcar serie" style="flex:none;width:52px;height:52px;border-radius:50%;border:1.5px solid #4a4a4a;background:#252525;font-family:'Space Mono',monospace;font-size:17px;cursor:pointer">{{ st.n }}</button>
-                      </sc-if>
+                    <div onClick="{{ st.onTap }}" role="button" aria-label="{{ st.aria }}" style="display:flex;align-items:center;gap:12px;padding:6px;border-radius:12px;background:{{ st.bg }};border:1.5px solid {{ st.border }};cursor:pointer;user-select:none;-webkit-user-select:none;transition:background .15s, border-color .15s">
+                      <span style="flex:none;width:48px;height:48px;border-radius:8px;background:{{ st.circleBg }};border:2px solid {{ st.circleBorder }};color:{{ st.circleColor }};display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:17px;font-weight:700">
+                        <sc-if value="{{ st.on }}">
+                          <svg width="24" height="24" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+                        </sc-if>
+                        <sc-if value="{{ st.off }}">
+                          <span>{{ st.n }}</span>
+                        </sc-if>
+                      </span>
                       <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
-                        <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.08em;color:#ccc;white-space:nowrap">{{ st.label }}</span>
-                        <span style="font-family:'Space Mono',monospace;font-size:10.5px;color:#888;white-space:nowrap">{{ st.hint }}</span>
+                        <span style="font-size:16px;font-weight:600;color:{{ st.labelColor }};white-space:nowrap">{{ st.label }}</span>
+                        <sc-if value="{{ st.hasHint }}">
+                          <span style="font-size:13px;color:{{ st.hintColor }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ st.hint }}</span>
+                        </sc-if>
                       </span>
                       <div style="flex:none;display:flex;align-items:center;gap:4px">
                         <button onClick="{{ st.onMinus }}" aria-label="Menos repeticiones" style="width:44px;height:44px;border-radius:50%;border:1px solid #333;background:#252525;display:flex;align-items:center;justify-content:center;cursor:pointer">
                           <svg width="18" height="18" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round"><path d="M5 12h14"></path></svg>
                         </button>
-                        <span style="width:38px;text-align:center;font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:{{ st.repColor }}">{{ st.r }}</span>
+                        <span style="width:44px;display:flex;flex-direction:column;align-items:center;gap:2px">
+                          <span style="font-family:'Space Mono',monospace;font-size:22px;font-weight:700;line-height:1;color:{{ st.repColor }}">{{ st.r }}</span>
+                          <span style="font-family:'Space Mono',monospace;font-size:12px;color:#9a9a9a">reps</span>
+                        </span>
                         <button onClick="{{ st.onPlus }}" aria-label="Más repeticiones" style="width:44px;height:44px;border-radius:50%;border:1px solid #333;background:#252525;display:flex;align-items:center;justify-content:center;cursor:pointer">
                           <svg width="18" height="18" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round"><path d="M12 5v14M5 12h14"></path></svg>
                         </button>
                       </div>
-                      <sc-if value="{{ st.canRemove }}">
-                        <button onClick="{{ st.onRemove }}" aria-label="Quitar serie" style="flex:none;width:30px;height:44px;border:0;padding:0;background:transparent;color:#9a9a9a;display:flex;align-items:center;justify-content:center;cursor:pointer">
-                          <svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
-                        </button>
-                      </sc-if>
                     </div>
                   </sc-for>
-                  <sc-if value="{{ ex.canAddSet }}">
-                    <button onClick="{{ ex.onAddSet }}" style="height:48px;border-radius:24px;border:1.5px dashed #555;background:transparent;color:#aaa;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.08em;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer">
-                      <svg width="14" height="14" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round"><path d="M12 5v14M5 12h14"></path></svg>
-                      <span>AGREGAR SERIE · {{ ex.setCountTxt }}/5</span>
-                    </button>
-                  </sc-if>
+                  <div style="display:flex;gap:8px">
+                    <sc-if value="{{ ex.canRemoveSet }}">
+                      <button onClick="{{ ex.onRemoveSet }}" style="flex:1;min-width:0;height:48px;border-radius:24px;border:1.5px solid #3a3a3a;background:transparent;color:#aaa;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.08em;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;white-space:nowrap">
+                        <svg width="14" height="14" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round"><path d="M5 12h14"></path></svg>
+                        <span>QUITAR SERIE</span>
+                      </button>
+                    </sc-if>
+                    <sc-if value="{{ ex.canAddSet }}">
+                      <button onClick="{{ ex.onAddSet }}" style="flex:1;min-width:0;height:48px;border-radius:24px;border:1.5px dashed #555;background:transparent;color:#ccc;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.08em;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;white-space:nowrap">
+                        <svg width="14" height="14" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round"><path d="M12 5v14M5 12h14"></path></svg>
+                        <span>AGREGAR SERIE</span>
+                      </button>
+                    </sc-if>
+                  </div>
                 </div>
               </sc-if>
 
               <div style="display:flex;flex-direction:column;gap:10px">
-                <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;color:#9a9a9a">PROGRESO · {{ ex.equipUp }}</span>
-                <sc-if value="{{ ex.hasChart }}">
-                  <div style="position:relative;height:118px;border-radius:6px;background:#8E9BA5;color:#1d2328">
-                    <div style="position:absolute;left:12px;right:12px;top:26px;bottom:26px">
-                      <svg viewBox="0 0 300 80" preserveAspectRatio="none" style="width:100%;height:100%;display:block;overflow:visible">
-                        <line x1="0" y1="0" x2="300" y2="0" style="stroke:#6f7b84;stroke-width:1;vector-effect:non-scaling-stroke"></line>
-                        <line x1="0" y1="40" x2="300" y2="40" style="stroke:#6f7b84;stroke-width:1;stroke-dasharray:3 3;vector-effect:non-scaling-stroke"></line>
-                        <line x1="0" y1="80" x2="300" y2="80" style="stroke:#6f7b84;stroke-width:1;vector-effect:non-scaling-stroke"></line>
-                        <polyline points="{{ ex.chartPts }}" style="fill:none;stroke:#111;stroke-width:2;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke"></polyline>
-                      </svg>
-                      <span style="position:absolute;left:{{ ex.chartX }};top:{{ ex.chartY }};width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:#111"></span>
-                      <span style="position:absolute;left:{{ ex.chartX }};top:{{ ex.chartY }};transform:translate(calc(-100% - 8px),-50%);padding:1px 8px;border:1px solid #3d474f;border-radius:10px;background:#8E9BA5;font-family:'Space Mono',monospace;font-size:10.5px;font-weight:700;color:#111;white-space:nowrap">{{ ex.chartLast }} KG</span>
+                <div style="display:flex;justify-content:space-between;align-items:center;min-height:28px">
+                  <span style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.14em;color:#9a9a9a">EQUIPO</span>
+                  <sc-if value="{{ ex.canRemove }}">
+                    <button onClick="{{ ex.onRemove }}" style="flex:none;white-space:nowrap;min-height:44px;border:0;background:transparent;font-size:14px;color:#9a9a9a;padding:0;cursor:pointer;text-decoration:underline">Quitar {{ ex.equip }}</button>
+                  </sc-if>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:8px">
+                  <sc-for list="{{ ex.chips }}" as="c" hint-placeholder-count="2">
+                    <sc-if value="{{ c.sel }}">
+                      <button onClick="{{ c.onPick }}" style="white-space:nowrap;height:44px;padding:0 14px;border-radius:10px;border:1.5px solid #FF3D0A;background:#FF3D0A;color:#111;display:flex;align-items:center;gap:8px;cursor:pointer;font-size:15px;font-weight:600">
+                        <span>{{ c.label }}</span>
+                        <span style="font-family:'Space Mono',monospace;font-size:13px;font-weight:400">{{ c.kg }}</span>
+                      </button>
+                    </sc-if>
+                    <sc-if value="{{ c.unsel }}">
+                      <button onClick="{{ c.onPick }}" style="white-space:nowrap;height:44px;padding:0 14px;border-radius:10px;border:1.5px solid #4a4a4a;background:#1a1a1a;color:#ddd;display:flex;align-items:center;gap:8px;cursor:pointer;font-size:15px;font-weight:500">
+                        <span>{{ c.label }}</span>
+                        <span style="font-family:'Space Mono',monospace;font-size:13px;color:#9a9a9a">{{ c.kg }}</span>
+                      </button>
+                    </sc-if>
+                  </sc-for>
+                  <sc-if value="{{ ex.notAdding }}">
+                    <button onClick="{{ ex.onAddOpen }}" style="white-space:nowrap;height:44px;padding:0 14px;border-radius:10px;border:1.5px dashed #555;background:transparent;color:#bbb;font-size:15px;font-weight:500;display:flex;align-items:center;gap:6px;cursor:pointer">
+                      <svg width="14" height="14" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round"><path d="M12 5v14M5 12h14"></path></svg>
+                      <span>Agregar</span>
+                    </button>
+                  </sc-if>
+                </div>
+                <sc-if value="{{ ex.adding }}">
+                  <div style="display:flex;flex-direction:column;gap:12px;padding:12px;border-radius:12px;background:#1f1f1f;border:1px solid #2c2c2c">
+                    <div style="display:flex;flex-wrap:wrap;gap:8px">
+                      <sc-for list="{{ ex.presets }}" as="pr" hint-placeholder-count="3">
+                        <button onClick="{{ pr.onAdd }}" style="height:44px;padding:0 12px;border-radius:10px;border:1px solid #4a4a4a;background:#111;font-size:15px;cursor:pointer">+ {{ pr.label }}</button>
+                      </sc-for>
                     </div>
-                    <span style="position:absolute;left:12px;top:7px;font-family:'Space Mono',monospace;font-size:10px">{{ ex.chartMax }}</span>
-                    <span style="position:absolute;left:12px;right:12px;bottom:6px;display:flex;justify-content:space-between;font-family:'Space Mono',monospace;font-size:10px">
-                      <span>{{ ex.chartFrom }}</span><span>{{ ex.chartCount }}</span><span>{{ ex.chartTo }}</span>
-                    </span>
+                    <div style="display:flex;gap:8px">
+                      <input value="{{ ex.newVar }}" onChange="{{ ex.onNewVar }}" onKeyDown="{{ ex.onNewKey }}" placeholder="Otro: Polea 2, Máquina azul…" style="flex:1;min-width:0;height:44px;border-radius:10px;border:1px solid #4a4a4a;background:#111;padding:0 12px;font-size:15px">
+                      <button onClick="{{ ex.onNewAdd }}" style="flex:none;height:44px;padding:0 16px;border:0;border-radius:10px;background:#FF3D0A;color:#111;font-family:'Space Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.08em;cursor:pointer">OK</button>
+                    </div>
+                    <button onClick="{{ ex.onAddCancel }}" style="align-self:flex-start;min-height:44px;border:0;background:transparent;color:#9a9a9a;font-size:14px;padding:0;cursor:pointer;text-decoration:underline">Cancelar</button>
                   </div>
-                </sc-if>
-                <sc-if value="{{ ex.noChart }}">
-                  <span style="font-family:'Space Mono',monospace;font-size:11.5px;line-height:1.5;color:#9a9a9a">El gráfico aparece después de 2 entrenos con {{ ex.equip }}.</span>
                 </sc-if>
               </div>
 
-              <div style="display:flex;flex-direction:column;gap:10px">
-                <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;color:#9a9a9a">NOTA</span>
-                <input value="{{ ex.note }}" onChange="{{ ex.onNote }}" placeholder="Ej. asiento en 4, agarre cerrado" style="width:100%;height:46px;border-radius:6px;border:1px solid #333;background:#1a1a1a;padding:0 12px;font-size:15px">
-              </div>
+              <button onClick="{{ ex.onMore }}" style="height:48px;border-radius:24px;border:1px solid #3a3a3a;background:transparent;color:#bbb;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.12em;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer">
+                <span>{{ ex.moreLabel }}</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;transform:rotate({{ ex.moreRot }})"><path d="M6 9l6 6 6-6"></path></svg>
+              </button>
+              <sc-if value="{{ ex.moreOpen }}">
+                <div style="display:flex;flex-direction:column;gap:22px">
+                  <div style="display:flex;flex-direction:column;gap:10px">
+                    <span style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.14em;color:#9a9a9a">PROGRESO · {{ ex.equipUp }}</span>
+                    <sc-if value="{{ ex.hasChart }}">
+                      <div style="position:relative;height:136px;border-radius:12px;background:#1a1a1a;border:1px solid #2c2c2c;color:#9a9a9a">
+                        <div style="position:absolute;left:14px;right:14px;top:34px;bottom:34px">
+                          <svg viewBox="0 0 300 80" preserveAspectRatio="none" style="width:100%;height:100%;display:block;overflow:visible">
+                            <line x1="0" y1="0" x2="300" y2="0" style="stroke:#333;stroke-width:1;vector-effect:non-scaling-stroke"></line>
+                            <line x1="0" y1="40" x2="300" y2="40" style="stroke:#333;stroke-width:1;stroke-dasharray:3 3;vector-effect:non-scaling-stroke"></line>
+                            <line x1="0" y1="80" x2="300" y2="80" style="stroke:#333;stroke-width:1;vector-effect:non-scaling-stroke"></line>
+                            <polyline points="{{ ex.chartPts }}" style="fill:none;stroke:#F2F2F2;stroke-width:2;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke"></polyline>
+                          </svg>
+                          <span style="position:absolute;left:{{ ex.chartX }};top:{{ ex.chartY }};width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:#FF3D0A"></span>
+                          <span style="position:absolute;left:{{ ex.chartX }};top:{{ ex.chartY }};transform:translate(calc(-100% - 10px),-50%);padding:2px 8px;border:1px solid #FF3D0A;border-radius:8px;background:#111;font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:#FF3D0A;white-space:nowrap">{{ ex.chartLast }} kg</span>
+                        </div>
+                        <span style="position:absolute;left:14px;top:9px;font-family:'Space Mono',monospace;font-size:12px">{{ ex.chartMax }}</span>
+                        <span style="position:absolute;left:14px;right:14px;bottom:8px;display:flex;justify-content:space-between;font-family:'Space Mono',monospace;font-size:12px">
+                          <span>{{ ex.chartFrom }}</span><span>{{ ex.chartCount }}</span><span>{{ ex.chartTo }}</span>
+                        </span>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ ex.noChart }}">
+                      <span style="font-size:14px;line-height:1.5;color:#9a9a9a">El gráfico aparece después de 2 entrenos con {{ ex.equip }}.</span>
+                    </sc-if>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:10px">
+                    <span style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.14em;color:#9a9a9a">NOTA</span>
+                    <input value="{{ ex.note }}" onChange="{{ ex.onNote }}" placeholder="Ej. asiento en 4, agarre cerrado" style="width:100%;height:48px;border-radius:10px;border:1px solid #333;background:#1a1a1a;padding:0 12px;font-size:15px">
+                  </div>
+                </div>
+              </sc-if>
             </div>
           </sc-if>
         </article>
@@ -386,17 +420,17 @@ setInterval(function(){ if (!document.querySelector('link[rel=manifest]')) { var
       <sc-if value="{{ restOn }}">
         <div style="position:relative;overflow:hidden;display:flex;align-items:center;gap:6px;height:60px;padding:0 8px 0 20px;margin-bottom:8px;border-radius:30px;background:#111;border:1px solid #FF3D0A">
           <div style="position:absolute;left:0;top:0;bottom:0;width:{{ restPct }};background:rgba(255,61,10,.18);transition:width .5s linear"></div>
-          <span style="position:relative;font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:.14em;color:#bbb">DESCANSO</span>
+          <span style="position:relative;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.1em;color:#bbb">DESCANSO</span>
           <span style="position:relative;flex:1;font-family:'Space Mono',monospace;font-size:26px;font-weight:700;color:#FF3D0A;padding-left:4px">{{ restTxt }}</span>
-          <button onClick="{{ restMinus }}" style="position:relative;height:44px;padding:0 10px;border-radius:22px;border:1px solid #333;background:#252525;font-family:'Space Mono',monospace;font-size:12px;cursor:pointer">−15</button>
-          <button onClick="{{ restPlus }}" style="position:relative;height:44px;padding:0 10px;border-radius:22px;border:1px solid #333;background:#252525;font-family:'Space Mono',monospace;font-size:12px;cursor:pointer">+15</button>
+          <button onClick="{{ restMinus }}" style="position:relative;height:44px;padding:0 10px;border-radius:22px;border:1px solid #333;background:#252525;font-family:'Space Mono',monospace;font-size:13px;cursor:pointer">−15</button>
+          <button onClick="{{ restPlus }}" style="position:relative;height:44px;padding:0 10px;border-radius:22px;border:1px solid #333;background:#252525;font-family:'Space Mono',monospace;font-size:13px;cursor:pointer">+15</button>
           <button onClick="{{ restStop }}" aria-label="Cortar descanso" style="position:relative;width:44px;height:44px;border-radius:50%;border:1px solid #333;background:#252525;display:flex;align-items:center;justify-content:center;cursor:pointer">
             <svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
           </button>
         </div>
       </sc-if>
       <sc-if value="{{ restDone }}">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;height:60px;padding:0 8px 0 20px;margin-bottom:8px;border-radius:30px;background:#8E9BA5;color:#111">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;height:60px;padding:0 8px 0 20px;margin-bottom:8px;border-radius:30px;background:#F2F2F2;color:#111">
           <span style="font-family:'Space Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.12em">DESCANSO LISTO · VAMOS</span>
           <button onClick="{{ restStop }}" aria-label="Cerrar" style="width:44px;height:44px;border-radius:50%;border:0;background:#111;color:#F2F2F2;display:flex;align-items:center;justify-content:center;cursor:pointer">
             <svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
@@ -404,7 +438,16 @@ setInterval(function(){ if (!document.querySelector('link[rel=manifest]')) { var
         </div>
       </sc-if>
       <sc-if value="{{ canFinish }}">
-        <button onClick="{{ finish }}" style="width:100%;height:60px;border:0;border-radius:30px;background:#FF3D0A;color:#111;font-family:'Space Mono',monospace;font-size:15px;font-weight:700;letter-spacing:.12em;cursor:pointer">TERMINAR Y GUARDAR · {{ sDone }}/{{ sTotal }}</button>
+        <div ref="{{ slideTrack }}" style="position:relative;width:100%;height:64px;border-radius:32px;background:#111;border:1.5px solid #FF3D0A;overflow:hidden;user-select:none;-webkit-user-select:none">
+          <div style="position:absolute;left:0;top:0;bottom:0;width:{{ slideFill }};border-radius:32px;background:#FF3D0A;transition:{{ slideTrans }}"></div>
+          <span style="position:absolute;inset:0;padding-left:56px;display:flex;align-items:center;justify-content:center;gap:8px;font-family:'Space Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.12em;color:#FF3D0A;opacity:{{ slideTextOp }};pointer-events:none;white-space:nowrap">
+            <span>DESLIZÁ PARA TERMINAR</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"><path d="M9 5l7 7-7 7"></path></svg>
+          </span>
+          <div onPointerDown="{{ slideDown }}" onPointerMove="{{ slideMove }}" onPointerUp="{{ slideUp }}" onPointerCancel="{{ slideUp }}" role="slider" aria-label="Deslizá para terminar y guardar" style="position:absolute;left:5px;top:5px;width:51px;height:51px;border-radius:50%;background:#FF3D0A;color:#111;display:flex;align-items:center;justify-content:center;touch-action:none;cursor:grab;box-shadow:0 2px 8px rgba(0,0,0,.45);transform:translateX({{ slideX }});transition:{{ slideTrans }}">
+            <svg width="24" height="24" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+          </div>
+        </div>
       </sc-if>
       <sc-if value="{{ cantFinish }}">
         <div style="width:100%;height:60px;border-radius:30px;background:#111;border:1px solid #2c2c2c;color:#9a9a9a;font-size:15px;display:flex;align-items:center;justify-content:center">Marcá un ejercicio para empezar</div>
@@ -415,37 +458,36 @@ setInterval(function(){ if (!document.querySelector('link[rel=manifest]')) { var
 
 <sc-if value="{{ isHistory }}" hint-placeholder-val="{{ false }}">
   <main data-screen-label="Historial" style="flex:1;display:flex;flex-direction:column;gap:14px;padding:16px 14px 32px">
-    <header style="display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:8px;padding:4px 0">
-      <button onClick="{{ goHome }}" aria-label="Volver" style="justify-self:start;height:36px;padding:0 10px;background:#111;border:1px solid #333;border-radius:4px;display:flex;align-items:center;gap:4px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.12em;color:#bbb;cursor:pointer">
-        <svg width="14" height="14" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"><path d="M15 5l-7 7 7 7"></path></svg>
-        <span>VOLVER</span>
+    <header style="display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;gap:8px">
+      <button onClick="{{ goHome }}" aria-label="Volver" style="width:44px;height:44px;border-radius:10px;background:#111;border:1px solid #333;display:flex;align-items:center;justify-content:center;color:#ccc;cursor:pointer">
+        <svg width="18" height="18" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"><path d="M15 5l-7 7 7 7"></path></svg>
       </button>
       <h1 style="margin:0;text-align:center;font-family:'Space Mono',monospace;font-size:19px;font-weight:700;letter-spacing:.22em">HISTORIAL</h1>
-      <span style="justify-self:end;padding:5px 10px;background:#111;border:1px solid #333;border-radius:4px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.1em;color:#bbb">{{ histCount }}</span>
+      <span style="text-align:center;font-family:'Space Mono',monospace;font-size:13px;color:#bbb">{{ histCount }}</span>
     </header>
     <sc-if value="{{ noHistory }}">
       <p style="margin:0;padding:12px 4px;color:#9a9a9a;font-size:15px;line-height:1.5;text-wrap:pretty">Todavía no guardaste ningún entreno. Cuando termines una sesión aparece acá.</p>
     </sc-if>
     <div style="display:flex;flex-direction:column;gap:10px">
       <sc-for list="{{ history }}" as="h" hint-placeholder-count="4">
-        <article style="background:#111;border:1px solid #2c2c2c;border-radius:{{ h.radius }};overflow:hidden;box-shadow:inset 0 1px 0 #262626">
+        <article style="background:#111;border:1px solid #2c2c2c;border-radius:20px;overflow:hidden">
           <button onClick="{{ h.onToggle }}" style="width:100%;display:flex;align-items:center;gap:12px;padding:8px;border:0;background:transparent;text-align:left;cursor:pointer">
-            <span style="flex:none;width:64px;height:64px;border-radius:50%;background:#252525;display:flex;flex-direction:column;align-items:center;justify-content:center">
-              <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;color:#9a9a9a">{{ h.dow }}</span>
-              <span style="font-family:'Space Mono',monospace;font-size:20px;font-weight:700;line-height:1.1">{{ h.day }}</span>
+            <span style="flex:none;width:64px;height:64px;border-radius:12px;background:#252525;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px">
+              <span style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.06em;color:#9a9a9a">{{ h.dow }}</span>
+              <span style="font-family:'Space Mono',monospace;font-size:20px;font-weight:700;line-height:1">{{ h.day }}</span>
             </span>
-            <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px">
-              <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.1em;color:#9a9a9a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ h.sub }}</span>
-              <span style="font-size:19px;font-weight:600;line-height:1.15;letter-spacing:-.01em;text-wrap:pretty">{{ h.title }}</span>
+            <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
+              <span style="font-size:18px;font-weight:600;line-height:1.15;letter-spacing:-.01em;text-wrap:pretty">{{ h.title }}</span>
+              <span style="font-family:'Space Mono',monospace;font-size:12px;color:#9a9a9a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ h.sub }}</span>
             </span>
-            <span style="flex:none;min-width:64px;height:48px;margin-right:6px;padding:0 10px;border-radius:6px;background:{{ h.scoreBg }};color:#111;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:15px;font-weight:700">{{ h.score }}</span>
+            <span style="flex:none;min-width:64px;height:48px;margin-right:6px;padding:0 10px;border-radius:10px;background:{{ h.scoreBg }};color:{{ h.scoreColor }};display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:15px;font-weight:700">{{ h.score }}</span>
           </button>
           <sc-if value="{{ h.open }}">
             <div style="padding:2px 18px 12px;display:flex;flex-direction:column">
               <sc-for list="{{ h.items }}" as="it" hint-placeholder-count="5">
-                <div style="display:flex;flex-direction:column;gap:3px;padding:11px 0;border-top:1px solid #2c2c2c">
-                  <span style="font-size:13.5px;line-height:1.3">{{ it.name }}</span>
-                  <span style="font-family:'Space Mono',monospace;font-size:11.5px;color:#9a9a9a">{{ it.detail }}</span>
+                <div style="display:flex;flex-direction:column;gap:3px;padding:12px 0;border-top:1px solid #2c2c2c">
+                  <span style="font-size:15px;line-height:1.3">{{ it.name }}</span>
+                  <span style="font-family:'Space Mono',monospace;font-size:12px;color:#9a9a9a">{{ it.detail }}</span>
                 </div>
               </sc-for>
             </div>
@@ -454,7 +496,7 @@ setInterval(function(){ if (!document.querySelector('link[rel=manifest]')) { var
       </sc-for>
     </div>
     <section style="display:flex;flex-direction:column;gap:10px;margin-top:10px">
-      <h2 style="margin:0;padding:0 2px;font-family:'Space Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.2em;color:#9a9a9a">BACKUP</h2>
+      <span style="padding:0 2px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.14em;color:#9a9a9a">BACKUP</span>
       <sc-if value="{{ noImport }}">
         <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
           <button onClick="{{ onExport }}" style="height:48px;border-radius:24px;border:1.5px solid #4a4a4a;background:#111;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.1em;color:#ddd;cursor:pointer">EXPORTAR</button>
@@ -463,78 +505,77 @@ setInterval(function(){ if (!document.querySelector('link[rel=manifest]')) { var
             <input type="file" accept=".json,application/json" onChange="{{ onPickBackup }}" style="display:none">
           </label>
         </div>
-        <span style="padding:0 2px;font-size:12.5px;line-height:1.45;color:#9a9a9a">Guardá el archivo en Drive o mandatelo por WhatsApp. Si cambiás de teléfono o se borran los datos de Chrome, lo importás acá.</span>
+        <span style="padding:0 2px;font-size:14px;line-height:1.45;color:#9a9a9a">Guardá el archivo en Drive o mandatelo por WhatsApp. Si cambiás de teléfono o se borran los datos del navegador, lo importás acá.</span>
       </sc-if>
       <sc-if value="{{ hasImport }}">
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <button onClick="{{ onApplyImport }}" style="height:52px;border:0;border-radius:26px;background:#FF3D0A;color:#111;font-family:'Space Mono',monospace;font-size:12.5px;font-weight:700;letter-spacing:.1em;cursor:pointer">{{ importTxt }}</button>
-          <button onClick="{{ onCancelImport }}" style="align-self:center;border:0;background:transparent;color:#9a9a9a;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.06em;padding:6px;cursor:pointer;text-decoration:underline">CANCELAR</button>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <button onClick="{{ onApplyImport }}" style="height:52px;border:0;border-radius:26px;background:#FF3D0A;color:#111;font-family:'Space Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.1em;cursor:pointer">{{ importTxt }}</button>
+          <button onClick="{{ onCancelImport }}" style="align-self:center;min-height:44px;border:0;background:transparent;color:#9a9a9a;font-size:14px;padding:0 8px;cursor:pointer;text-decoration:underline">Cancelar</button>
         </div>
       </sc-if>
     </section>
-    <button onClick="{{ onReset }}" style="align-self:center;margin-top:8px;border:0;background:transparent;color:{{ resetColor }};font-size:13px;padding:12px;cursor:pointer;text-decoration:underline">{{ resetLabel }}</button>
+    <button onClick="{{ onReset }}" style="align-self:center;margin-top:8px;border:0;background:transparent;color:{{ resetColor }};font-size:14px;padding:12px;cursor:pointer;text-decoration:underline">{{ resetLabel }}</button>
   </main>
 </sc-if>
 
 <sc-if value="{{ isEdit }}" hint-placeholder-val="{{ false }}">
   <main data-screen-label="Editar rutina" style="flex:1;display:flex;flex-direction:column;gap:14px;padding:16px 14px 40px">
-    <header style="display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:8px;padding:4px 0">
-      <button onClick="{{ goHome }}" aria-label="Volver" style="justify-self:start;height:36px;padding:0 10px;background:#111;border:1px solid #333;border-radius:4px;display:flex;align-items:center;gap:4px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.12em;color:#bbb;cursor:pointer">
-        <svg width="14" height="14" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"><path d="M15 5l-7 7 7 7"></path></svg>
-        <span>VOLVER</span>
+    <header style="display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;gap:8px">
+      <button onClick="{{ goHome }}" aria-label="Volver" style="width:44px;height:44px;border-radius:10px;background:#111;border:1px solid #333;display:flex;align-items:center;justify-content:center;color:#ccc;cursor:pointer">
+        <svg width="18" height="18" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"><path d="M15 5l-7 7 7 7"></path></svg>
       </button>
       <h1 style="margin:0;text-align:center;font-family:'Space Mono',monospace;font-size:19px;font-weight:700;letter-spacing:.22em">RUTINA</h1>
-      <span style="justify-self:end;padding:5px 10px;background:#111;border:1px solid #333;border-radius:4px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.1em;color:#bbb;white-space:nowrap">{{ editCount }}</span>
+      <span></span>
     </header>
-    <p style="margin:0;padding:0 2px;font-size:13.5px;line-height:1.5;color:#9a9a9a">Los cambios se guardan solos. El historial y los pesos no se pierden.</p>
+    <p style="margin:0;padding:0 2px;font-size:14px;line-height:1.5;color:#9a9a9a">Los cambios se guardan solos. El historial y los pesos no se pierden.</p>
 
     <div style="display:flex;flex-wrap:wrap;gap:8px">
       <sc-for list="{{ editTabs }}" as="t" hint-placeholder-count="4">
         <sc-if value="{{ t.sel }}">
-          <button onClick="{{ t.onPick }}" style="height:44px;min-width:56px;padding:0 12px;border-radius:6px;border:1.5px solid #FF3D0A;background:#FF3D0A;color:#111;font-family:'Space Mono',monospace;font-size:14px;font-weight:700;letter-spacing:.08em;cursor:pointer">{{ t.label }}</button>
+          <button onClick="{{ t.onPick }}" style="height:44px;min-width:56px;padding:0 12px;border-radius:10px;border:1.5px solid #FF3D0A;background:#FF3D0A;color:#111;font-family:'Space Mono',monospace;font-size:14px;font-weight:700;letter-spacing:.08em;cursor:pointer">{{ t.label }}</button>
         </sc-if>
         <sc-if value="{{ t.unsel }}">
-          <button onClick="{{ t.onPick }}" style="height:44px;min-width:56px;padding:0 12px;border-radius:6px;border:1.5px solid #4a4a4a;background:#111;color:#ddd;font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.08em;cursor:pointer">{{ t.label }}</button>
+          <button onClick="{{ t.onPick }}" style="height:44px;min-width:56px;padding:0 12px;border-radius:10px;border:1.5px solid #4a4a4a;background:#111;color:#ddd;font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.08em;cursor:pointer">{{ t.label }}</button>
         </sc-if>
       </sc-for>
-      <button onClick="{{ addSession }}" style="height:44px;padding:0 12px;border-radius:6px;border:1.5px dashed #555;background:transparent;color:#aaa;font-family:'Space Mono',monospace;font-size:12.5px;letter-spacing:.08em;cursor:pointer">+ SESIÓN</button>
+      <button onClick="{{ addSession }}" style="height:44px;padding:0 12px;border-radius:10px;border:1.5px dashed #555;background:transparent;color:#bbb;font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.08em;cursor:pointer">+ SESIÓN</button>
     </div>
 
-    <div style="background:#FF3D0A;color:#111;border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:4px">
-      <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.12em;color:#5a1300">{{ editTitle }} · ENFOQUE</span>
+    <div style="background:#FF3D0A;color:#111;border-radius:20px;padding:14px 16px;display:flex;flex-direction:column;gap:4px">
+      <span style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.1em;color:#5a1300">{{ editTitle }} · ENFOQUE</span>
       <input value="{{ editFocus }}" onChange="{{ onEditFocus }}" placeholder="Ej. Pecho · Tríceps" style="width:100%;height:46px;border:0;border-bottom:2px solid #111;background:transparent;font-size:24px;font-weight:600;color:#111;padding:0">
     </div>
 
     <sc-for list="{{ editEx }}" as="e" hint-placeholder-count="5">
-      <div style="background:#111;border:1px solid #2c2c2c;border-radius:20px;padding:12px;display:flex;flex-direction:column;gap:10px;box-shadow:inset 0 1px 0 #262626">
+      <div style="background:#111;border:1px solid #2c2c2c;border-radius:20px;padding:12px;display:flex;flex-direction:column;gap:10px">
         <div style="display:flex;align-items:center;gap:8px">
-          <span style="flex:none;width:26px;font-family:'Space Mono',monospace;font-size:12px;color:#9a9a9a">{{ e.idx }}</span>
-          <input value="{{ e.name }}" onChange="{{ e.onName }}" placeholder="Nombre del ejercicio" style="flex:1;min-width:0;height:44px;border-radius:6px;border:1px solid #333;background:#1a1a1a;padding:0 10px;font-size:15px;font-weight:600">
+          <span style="flex:none;width:28px;font-family:'Space Mono',monospace;font-size:13px;color:#9a9a9a">{{ e.idx }}</span>
+          <input value="{{ e.name }}" onChange="{{ e.onName }}" placeholder="Nombre del ejercicio" style="flex:1;min-width:0;height:44px;border-radius:10px;border:1px solid #333;background:#1a1a1a;padding:0 12px;font-size:16px;font-weight:600">
         </div>
-        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-left:34px">
-          <span style="font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:.1em;color:#9a9a9a">SERIES</span>
-          <button onClick="{{ e.onSetsMinus }}" aria-label="Menos series" style="width:40px;height:40px;border-radius:50%;border:1px solid #333;background:#252525;display:flex;align-items:center;justify-content:center;cursor:pointer">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-left:36px">
+          <span style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.08em;color:#9a9a9a">SERIES</span>
+          <button onClick="{{ e.onSetsMinus }}" aria-label="Menos series" style="width:44px;height:44px;border-radius:50%;border:1px solid #333;background:#252525;display:flex;align-items:center;justify-content:center;cursor:pointer">
             <svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round"><path d="M5 12h14"></path></svg>
           </button>
           <span style="width:22px;text-align:center;font-family:'Space Mono',monospace;font-size:18px;font-weight:700">{{ e.sets }}</span>
-          <button onClick="{{ e.onSetsPlus }}" aria-label="Más series" style="width:40px;height:40px;border-radius:50%;border:1px solid #333;background:#252525;display:flex;align-items:center;justify-content:center;cursor:pointer">
+          <button onClick="{{ e.onSetsPlus }}" aria-label="Más series" style="width:44px;height:44px;border-radius:50%;border:1px solid #333;background:#252525;display:flex;align-items:center;justify-content:center;cursor:pointer">
             <svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round"><path d="M12 5v14M5 12h14"></path></svg>
           </button>
-          <span style="margin-left:6px;font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:.1em;color:#9a9a9a">REPS</span>
-          <input value="{{ e.reps }}" onChange="{{ e.onReps }}" placeholder="8-12" style="width:76px;height:40px;border-radius:6px;border:0;background:#8E9BA5;color:#111;text-align:center;font-family:'Space Mono',monospace;font-size:15px;font-weight:700;padding:0 4px">
+          <span style="margin-left:6px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.08em;color:#9a9a9a">REPS</span>
+          <input value="{{ e.reps }}" onChange="{{ e.onReps }}" placeholder="8-12" style="width:80px;height:44px;border-radius:10px;border:1px solid #4a4a4a;background:#1a1a1a;color:#F2F2F2;text-align:center;font-family:'Space Mono',monospace;font-size:15px;font-weight:700;padding:0 4px">
         </div>
         <div style="display:flex;gap:6px;justify-content:flex-end">
-          <button onClick="{{ e.onUp }}" aria-label="Subir" style="width:40px;height:40px;border-radius:50%;border:1px solid #333;background:#1a1a1a;display:flex;align-items:center;justify-content:center;cursor:pointer;color:{{ e.upColor }}">
+          <button onClick="{{ e.onUp }}" aria-label="Subir" style="width:44px;height:44px;border-radius:50%;border:1px solid #333;background:#1a1a1a;display:flex;align-items:center;justify-content:center;cursor:pointer;color:{{ e.upColor }}">
             <svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"><path d="M6 15l6-6 6 6"></path></svg>
           </button>
-          <button onClick="{{ e.onDown }}" aria-label="Bajar" style="width:40px;height:40px;border-radius:50%;border:1px solid #333;background:#1a1a1a;display:flex;align-items:center;justify-content:center;cursor:pointer;color:{{ e.downColor }}">
+          <button onClick="{{ e.onDown }}" aria-label="Bajar" style="width:44px;height:44px;border-radius:50%;border:1px solid #333;background:#1a1a1a;display:flex;align-items:center;justify-content:center;cursor:pointer;color:{{ e.downColor }}">
             <svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"><path d="M6 9l6 6 6-6"></path></svg>
           </button>
           <sc-if value="{{ e.confirm }}">
-            <button onClick="{{ e.onDel }}" style="height:40px;padding:0 12px;border-radius:20px;border:0;background:#FF3D0A;color:#111;font-family:'Space Mono',monospace;font-size:11.5px;font-weight:700;letter-spacing:.08em;cursor:pointer">¿BORRAR?</button>
+            <button onClick="{{ e.onDel }}" style="height:44px;padding:0 14px;border-radius:22px;border:0;background:#FF3D0A;color:#111;font-family:'Space Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.08em;cursor:pointer">¿BORRAR?</button>
           </sc-if>
           <sc-if value="{{ e.noConfirm }}">
-            <button onClick="{{ e.onDel }}" aria-label="Borrar ejercicio" style="width:40px;height:40px;border-radius:50%;border:1px solid #333;background:#1a1a1a;color:#bbb;display:flex;align-items:center;justify-content:center;cursor:pointer">
+            <button onClick="{{ e.onDel }}" aria-label="Borrar ejercicio" style="width:44px;height:44px;border-radius:50%;border:1px solid #333;background:#1a1a1a;color:#bbb;display:flex;align-items:center;justify-content:center;cursor:pointer">
               <svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"></path></svg>
             </button>
           </sc-if>
@@ -544,20 +585,23 @@ setInterval(function(){ if (!document.querySelector('link[rel=manifest]')) { var
     <sc-if value="{{ editEmpty }}">
       <p style="margin:0;padding:4px 2px;color:#9a9a9a;font-size:14px">Esta sesión todavía no tiene ejercicios.</p>
     </sc-if>
-    <button onClick="{{ addEx }}" style="height:52px;border-radius:26px;border:1.5px dashed #555;background:transparent;color:#ccc;font-family:'Space Mono',monospace;font-size:12.5px;letter-spacing:.1em;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer">
+    <button onClick="{{ addEx }}" style="height:52px;border-radius:26px;border:1.5px dashed #555;background:transparent;color:#ccc;font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.1em;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer">
       <svg width="14" height="14" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round"><path d="M12 5v14M5 12h14"></path></svg>
       <span>AGREGAR EJERCICIO</span>
     </button>
     <sc-if value="{{ canDelSession }}">
-      <button onClick="{{ delSession }}" style="align-self:center;margin-top:6px;border:0;background:transparent;color:{{ delSessColor }};font-size:13px;padding:12px;cursor:pointer;text-decoration:underline">{{ delSessLabel }}</button>
+      <button onClick="{{ delSession }}" style="align-self:center;margin-top:6px;border:0;background:transparent;color:{{ delSessColor }};font-size:14px;padding:12px;cursor:pointer;text-decoration:underline">{{ delSessLabel }}</button>
     </sc-if>
   </main>
 </sc-if>
 
 <sc-if value="{{ hasToast }}">
-  <div style="position:fixed;left:50%;bottom:92px;transform:translateX(-50%);background:#F2F2F2;color:#111;padding:12px 18px;border-radius:24px;font-family:'Space Mono',monospace;font-size:12.5px;font-weight:700;letter-spacing:.08em;z-index:20;display:flex;align-items:center;gap:8px;white-space:nowrap">
-    <svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
-    <span>{{ toast }}</span>
+  <div style="position:fixed;left:50%;top:calc(12px + env(safe-area-inset-top));transform:translateX(-50%);width:calc(100% - 28px);max-width:452px;min-height:52px;background:#F2F2F2;color:#111;padding:6px 6px 6px 18px;border-radius:26px;box-shadow:0 6px 20px rgba(0,0,0,.45);font-family:'Space Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.08em;z-index:30;display:flex;align-items:center;gap:10px">
+    <svg width="16" height="16" viewBox="0 0 24 24" style="flex:none;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+    <span style="flex:1;min-width:0;padding:8px 0">{{ toast }}</span>
+    <sc-if value="{{ hasUndo }}">
+      <button onClick="{{ onUndo }}" style="flex:none;height:44px;padding:0 16px;border-radius:22px;border:0;background:#111;color:#FF3D0A;font-family:'Space Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.1em;cursor:pointer">DESHACER</button>
+    </sc-if>
   </div>
 </sc-if>
 
@@ -567,7 +611,7 @@ setInterval(function(){ if (!document.querySelector('link[rel=manifest]')) { var
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:412,&quot;height&quot;:880},&quot;descanso&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;0&quot;,&quot;60&quot;,&quot;90&quot;,&quot;120&quot;,&quot;180&quot;],&quot;default&quot;:&quot;90&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;label&quot;:&quot;Descanso (seg, 0 = apagado)&quot;},&quot;paso&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;1&quot;,&quot;2.5&quot;,&quot;5&quot;],&quot;default&quot;:&quot;2.5&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;label&quot;:&quot;Salto de peso (kg)&quot;},&quot;marcado&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;series&quot;,&quot;ejercicio&quot;],&quot;default&quot;:&quot;series&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;label&quot;:&quot;Marcar por&quot;}}">
 const KEY = 'gym-mauro-v3';
 const DAY = 86400000;
-const C = { acc: '#FF3D0A', ink: '#111', text: '#F2F2F2', muted: '#9a9a9a', panelInk: '#1d2328', line: '#2c2c2c', panel: '#8E9BA5' };
+const C = { up: '#3DDC97', acc: '#FF3D0A', ink: '#111', text: '#F2F2F2', muted: '#9a9a9a', panelInk: '#1d2328', line: '#2c2c2c', panel: '#8E9BA5' };
 const SEED = [
   ['Pecho · Tríceps', [
     ['PECK DECK', 3, '10', 'Máquina:50'],
@@ -596,6 +640,16 @@ const SEED = [
     ['SUMO', 3, '6-10', 'Mancuerna:28'],
     ['ABDUCTOR/ADUCTOR', 4, '10', 'Máquina:50']]]
 ];
+const NAMES = {
+  s1e0: 'Peck deck', s1e1: 'Press plano', s1e2: 'Press inclinado', s1e3: 'Press francés', s1e4: 'Tríceps katana', s1e5: 'Extensión de tríceps',
+  s2e0: 'Remo en Gironda', s2e1: 'Remo T', s2e2: 'Dorsalera al pecho', s2e3: 'Curl de bíceps', s2e4: 'Curl inclinado o bayesian', s2e5: 'Martillo',
+  s3e0: 'Sentadilla hack', s3e1: 'Extensión de cuádriceps', s3e2: 'Peso muerto rumano', s3e3: 'Curl femoral', s3e4: 'Gemelos',
+  s4e0: 'Press militar', s4e1: 'Vuelos laterales', s4e2: 'Vuelos posteriores', s4e3: 'Sumo', s4e4: 'Abductor / aductor'
+};
+const SEED_UP = {};
+SEED.forEach((s, si) => s[1].forEach((e, i) => { SEED_UP[`s${si + 1}e${i}`] = e[0]; }));
+const tidy = n => (n && n === n.toUpperCase() && /[A-ZÁÉÍÓÚÑ]/.test(n)) ? n.charAt(0) + n.slice(1).toLowerCase() : n;
+const fixName = (id, n) => (NAMES[id] && n === SEED_UP[id]) ? NAMES[id] : tidy(n);
 const PRESETS = ['Máquina', 'Mancuerna', 'Barra', 'Polea', 'Smith'];
 const DOW = ['DOM', 'LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB'];
 const MES = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC'];
@@ -606,13 +660,15 @@ const weekKey = d => { const x = sod(d); x.setDate(x.getDate() - ((x.getDay() + 
 const ago = iso => Math.round((sod(new Date()) - sod(iso)) / DAY);
 const dm = iso => { const d = new Date(iso); return `${d.getDate()}/${d.getMonth() + 1}`; };
 const rel = iso => { const n = ago(iso); return n <= 0 ? 'hoy' : n === 1 ? 'ayer' : n < 7 ? `hace ${n} días` : dm(iso); };
+const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
 const fkg = k => String(Math.round(k * 100) / 100).replace('.', ',');
 const num = s => parseFloat(String(s ?? '').replace(',', '.'));
+const hhmm = iso => { const t = new Date(iso); return `${t.getHours()}:${String(t.getMinutes()).padStart(2, '0')}`; };
 const mmss = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 const parseEq = (spec, withKg) => String(spec || 'Máquina').split('/').map(p => { const [n, k] = p.split(':'); return { n, kg: withKg ? (+k || 0) : 0 }; });
 const repRange = s => { const [a, b] = String(s).split('-').map(x => parseInt(x, 10)); const lo = isNaN(a) ? 10 : a; return [lo, isNaN(b) ? lo : b]; };
 const repsTxt = it => it.reps && it.reps.length ? it.reps.join('·') + ' reps' : `${it.sets}/${it.of}`;
-const seedPlan = () => ({ sessions: SEED.map((s, si) => ({ id: si + 1, focus: s[0], ex: s[1].map((e, i) => ({ id: `s${si + 1}e${i}`, name: e[0], sets: e[1], reps: e[2], eq: e[3] })) })) });
+const seedPlan = () => ({ sessions: SEED.map((s, si) => ({ id: si + 1, focus: s[0], ex: s[1].map((e, i) => { const id = `s${si + 1}e${i}`; return { id, name: fixName(id, e[0]), sets: e[1], reps: e[2], eq: e[3] }; }) })) });
 const findSess = (d, id) => d.plan.sessions.find(s => s.id === id);
 const sNum = (d, id) => { const p = d.plan.sessions.findIndex(s => s.id === id); return p < 0 ? '—' : String(p + 1); };
 const sortedHist = d => [...d.history].sort((a, b) => b.date.localeCompare(a.date));
@@ -670,15 +726,40 @@ function normalize(d) {
   if (!d.body) d.body = demoish ? build(true).body : [];
   d.history = d.history || []; d.active = d.active || {}; d.sel = d.sel || {};
   d.plan.sessions.forEach(s => s.ex.forEach(e => {
+    e.name = fixName(e.id, e.name);
     if (!d.variants[e.id] || !d.variants[e.id].length) d.variants[e.id] = parseEq(e.eq, false);
     if (d.sel[e.id] == null || d.sel[e.id] >= d.variants[e.id].length) d.sel[e.id] = 0;
   }));
+  d.history.forEach(h => h.items.forEach(it => { it.name = fixName(it.eid, it.name); }));
+  if (!d.seenTap && (d.history.length || Object.values(d.active).some(a => Object.values(a.sets || {}).some(arr => (arr || []).some(x => x && (x.on || x === true)))))) d.seenTap = true;
   return d;
 }
 
 class Component extends DCLogic {
-  state = { screen: 'home', sid: 1, open: null, adding: null, newVar: '', drafts: {}, histOpen: null, toast: null, confirmReset: false, rest: null, editSid: 1, confirmDelEx: null, confirmDelSess: false, bodyDraft: null, bodyEdit: false, pendingImport: null, data: load() };
+  state = { screen: 'home', sid: 1, open: null, adding: null, newVar: '', drafts: {}, histOpen: null, toast: null, confirmReset: false, rest: null, editSid: 1, confirmDelEx: null, confirmDelSess: false, bodyDraft: null, bodyEdit: false, more: null, undo: null, menu: false, pendingImport: null, data: load() };
 
+  slideTrack = React.createRef();
+  slideMax() { const el = this.slideTrack.current; return el ? Math.max(1, el.clientWidth - 61) : 280; }
+  slideDown(e) {
+    if (this.state.slideDone) return;
+    try { e.currentTarget.setPointerCapture(e.pointerId); } catch (err) {}
+    this._sx = e.clientX - (this.state.slideX || 0);
+    this.setState({ sliding: true });
+  }
+  slideMove(e) {
+    if (!this.state.sliding) return;
+    const x = Math.max(0, Math.min(this.slideMax(), e.clientX - this._sx));
+    this.setState({ slideX: x });
+  }
+  slideUp() {
+    if (!this.state.sliding) return;
+    const max = this.slideMax();
+    if ((this.state.slideX || 0) >= max * 0.88) {
+      this.setState({ sliding: false, slideX: max, slideDone: true });
+      try { navigator.vibrate && navigator.vibrate(60); } catch (err) {}
+      setTimeout(() => { this.setState({ slideX: 0, slideDone: false }); this.finish(); }, 260);
+    } else this.setState({ sliding: false, slideX: 0 });
+  }
   componentDidMount() { this._iv = setInterval(() => this.tick(), 500); }
   componentWillUnmount() { clearTimeout(this._t); clearInterval(this._iv); this.wakeOff(); }
 
@@ -715,8 +796,14 @@ class Component extends DCLogic {
 
   upd(fn) { this.setState(s => { const data = JSON.parse(JSON.stringify(s.data)); fn(data); persist(data); return { data }; }); }
   ensureActive(d, sid) { if (!d.active[sid]) d.active[sid] = { start: new Date().toISOString(), sets: {} }; return d.active[sid]; }
-  go(screen, extra) { this.setState({ screen, open: null, adding: null, confirmReset: false, confirmDelEx: null, confirmDelSess: false, bodyEdit: false, pendingImport: null, ...(extra || {}) }); window.scrollTo(0, 0); }
-  flash(msg) { this.setState({ toast: msg }); clearTimeout(this._t); this._t = setTimeout(() => this.setState({ toast: null }), 2400); }
+  go(screen, extra) { this.setState({ screen, slideX: 0, sliding: false, slideDone: false, open: null, adding: null, confirmReset: false, confirmDelEx: null, confirmDelSess: false, bodyEdit: false, more: null, menu: false, pendingImport: null, ...(extra || {}) }); window.scrollTo(0, 0); }
+  flash(msg, undo) { this.setState({ toast: msg, undo: undo || null }); clearTimeout(this._t); this._t = setTimeout(() => this.setState({ toast: null, undo: null }), undo ? 5000 : 2400); }
+  doUndo() {
+    const u = this.state.undo; if (!u) return;
+    const data = JSON.parse(u.data); persist(data); clearTimeout(this._t);
+    this.setState({ data, toast: null, undo: null, drafts: {} });
+    if (u.screen) this.go(u.screen, { sid: u.sid });
+  }
 
   setsUpd(sid, exId, fn) {
     this.upd(d => { const s = findSess(d, sid), ex = s && s.ex.find(e => e.id === exId); if (!ex) return; const a = this.ensureActive(d, sid); const arr = getSets(d, sid, ex); fn(arr); a.sets[exId] = arr; });
@@ -724,11 +811,12 @@ class Component extends DCLogic {
   toggleSet(sid, ex, k) {
     const was = getSets(this.state.data, sid, ex)[k].on;
     this.setsUpd(sid, ex.id, arr => { arr[k].on = !arr[k].on; });
+    if (!this.state.data.seenTap) this.upd(d => { d.seenTap = true; });
     if (!was) this.startRest();
   }
   repBump(sid, ex, k, dl) { this.setsUpd(sid, ex.id, arr => { arr[k].r = Math.max(1, Math.min(60, (arr[k].r || 0) + dl)); }); }
   addSet(sid, ex) { this.setsUpd(sid, ex.id, arr => { if (arr.length < 5) arr.push({ on: false, r: arr.length ? arr[arr.length - 1].r : repRange(ex.reps)[0] }); }); }
-  removeSet(sid, ex, k) { this.setsUpd(sid, ex.id, arr => { if (arr.length > 1) arr.splice(k, 1); }); }
+  removeLastSet(sid, ex) { const snap = JSON.stringify(this.state.data); this.setsUpd(sid, ex.id, arr => { if (arr.length > 1) arr.pop(); }); this.flash('SERIE QUITADA', { data: snap }); }
   toggleAll(sid, ex) {
     const all = getSets(this.state.data, sid, ex).every(x => x.on);
     this.setsUpd(sid, ex.id, arr => { arr.forEach(x => { x.on = !all; }); });
@@ -756,10 +844,10 @@ class Component extends DCLogic {
     this.dropDraft(id);
     this.setState({ adding: null, newVar: '' });
   }
-  removeVar(id) { this.dropDraft(id); this.upd(d => { const vs = d.variants[id]; if (vs.length < 2) return; vs.splice(d.sel[id] || 0, 1); d.sel[id] = 0; }); }
+  removeVar(id) { const snap = JSON.stringify(this.state.data); this.flash('EQUIPO QUITADO', { data: snap }); this.dropDraft(id); this.upd(d => { const vs = d.variants[id]; if (vs.length < 2) return; vs.splice(d.sel[id] || 0, 1); d.sel[id] = 0; }); }
   setNote(id, v) { this.upd(d => { if (v) d.notes[id] = v; else delete d.notes[id]; }); }
   finish() {
-    const sid = this.state.sid;
+    const sid = this.state.sid, snap = JSON.stringify(this.state.data);
     this.upd(d => {
       const a = d.active[sid], s = findSess(d, sid);
       if (!a || !s) return;
@@ -772,11 +860,11 @@ class Component extends DCLogic {
     });
     this.setState({ rest: null });
     this.go('home');
-    this.flash(`SESIÓN ${sNum(this.state.data, sid)} GUARDADA`);
+    this.flash(`SESIÓN ${sNum(this.state.data, sid)} GUARDADA`, { data: snap, screen: 'session', sid });
   }
   reset() {
     if (!this.state.confirmReset) { this.setState({ confirmReset: true }); return; }
-    this.upd(d => { const fresh = build(false); d.history = []; d.active = {}; d.body = []; d.notes = {}; Object.keys(d.variants).forEach(k => d.variants[k].forEach(v => { v.kg = 0; })); void fresh; });
+    this.upd(d => { d.history = []; d.active = {}; d.body = []; d.notes = {}; Object.keys(d.variants).forEach(k => d.variants[k].forEach(v => { v.kg = 0; })); });
     this.setState({ confirmReset: false, histOpen: null, drafts: {} });
     this.flash('DATOS BORRADOS');
   }
@@ -809,18 +897,21 @@ class Component extends DCLogic {
   applyBackup() {
     const d = this.state.pendingImport;
     if (!d) return;
+    const snap = JSON.stringify(this.state.data);
     const data = normalize(JSON.parse(JSON.stringify(d)));
     persist(data);
     this.setState({ data, pendingImport: null, histOpen: null, drafts: {}, confirmReset: false });
-    this.flash('BACKUP CARGADO');
+    this.flash('BACKUP CARGADO', { data: snap });
   }
 
   editUpd(fn) { this.upd(d => { const s = findSess(d, this.state.editSid) || d.plan.sessions[0]; if (s) fn(s, d); }); }
   moveEx(exId, dir) { this.editUpd(s => { const i = s.ex.findIndex(e => e.id === exId), j = i + dir; if (i < 0 || j < 0 || j >= s.ex.length) return; const t = s.ex[i]; s.ex[i] = s.ex[j]; s.ex[j] = t; }); }
   delEx(exId) {
     if (this.state.confirmDelEx !== exId) { this.setState({ confirmDelEx: exId }); return; }
+    const snap = JSON.stringify(this.state.data);
     this.editUpd((s, d) => { s.ex = s.ex.filter(e => e.id !== exId); Object.values(d.active).forEach(a => { delete a.sets[exId]; }); });
     this.setState({ confirmDelEx: null });
+    this.flash('EJERCICIO BORRADO', { data: snap });
   }
   addEx() {
     const id = 'x' + Date.now().toString(36);
@@ -835,8 +926,10 @@ class Component extends DCLogic {
     if (!this.state.confirmDelSess) { this.setState({ confirmDelSess: true }); return; }
     const id = this.state.editSid, rest = this.state.data.plan.sessions.filter(s => s.id !== id);
     if (!rest.length) return;
+    const snap = JSON.stringify(this.state.data);
     this.upd(d => { d.plan.sessions = d.plan.sessions.filter(s => s.id !== id); delete d.active[id]; });
     this.setState({ editSid: rest[0].id, confirmDelSess: false });
+    this.flash('SESIÓN BORRADA', { data: snap });
   }
 
   bodySave() {
@@ -855,23 +948,23 @@ class Component extends DCLogic {
     const perSet = (P.marcado ?? 'series') === 'series';
     const S = d.plan.sessions;
     const hist = sortedHist(d), last = hist[0];
+    const exProg = (sid, e) => { const a = d.active[sid], arr = a ? getSets(d, sid, e) : null, len = arr ? arr.length : e.sets, c = arr ? arr.filter(x => x.on).length : 0; return { c, len }; };
     const progress = sid => {
       const s = findSess(d, sid); let done = 0, any = 0, sets = 0, setsTotal = 0;
       if (!s) return { done, any, total: 0, sets, setsTotal: 1 };
-      const a = d.active[sid];
-      s.ex.forEach(e => { const arr = a ? getSets(d, sid, e) : null, len = arr ? arr.length : e.sets, c = arr ? arr.filter(x => x.on).length : 0; sets += c; setsTotal += len; if (c > 0) any++; if (c >= len) done++; });
+      s.ex.forEach(e => { const { c, len } = exProg(sid, e); sets += c; setsTotal += len; if (c > 0) any++; if (c >= len) done++; });
       return { done, any, total: s.ex.length, sets, setsTotal: setsTotal || 1 };
     };
     const now = new Date(), today = sod(now), closedToday = now.getDay() === CLOSED_DAY;
 
-    // Home
     const inProg = S.find(s => progress(s.id).any > 0);
     let nextS = S[0];
     if (inProg) nextS = inProg;
     else if (last) { const p = S.findIndex(s => s.id === last.sid); nextS = S[(p + 1) % S.length] || S[0]; }
     const nextSid = nextS.id, np = progress(nextSid), nextH = hist.find(x => x.sid === nextSid);
     let cornerTxt = '';
-    if (closedToday) cornerTxt = 'Hoy cerrado';
+    if (inProg) cornerTxt = '';
+    else if (closedToday) cornerTxt = 'Hoy cerrado';
     else if (last) {
       const n = ago(last.date), ls = findSess(d, last.sid);
       const pre = n <= 0 ? 'Hoy' : n === 1 ? 'Ayer' : n < 7 ? `Hace ${n} d` : dm(last.date);
@@ -885,34 +978,33 @@ class Component extends DCLogic {
       const isToday = dt.getTime() === today.getTime(), closed = dt.getDay() === CLOSED_DAY;
       if (h) weekDone++;
       return {
-        letter: 'LMMJVSD'[i], label: h ? `S${sNum(d, h.sid)}` : closed ? '—' : String(dt.getDate()),
-        bg: h ? C.ink : 'transparent', color: h ? C.acc : C.panelInk,
-        border: h ? C.ink : isToday ? C.ink : closed ? '#5f6a73' : '#6f7b84', bstyle: closed ? 'dashed' : 'solid'
+        letter: 'LMMJVSD'[i], letterColor: isToday ? C.acc : C.muted,
+        label: h ? `S${sNum(d, h.sid)}` : closed ? '—' : String(dt.getDate()),
+        bg: h ? C.text : 'transparent', color: h ? C.ink : closed ? '#666' : isToday ? C.text : '#bbb',
+        border: h ? C.text : isToday ? C.acc : closed ? '#3a3a3a' : '#333', bstyle: closed ? 'dashed' : 'solid'
       };
     });
     const sessions = S.map((s, si) => {
       const h = hist.find(x => x.sid === s.id), p = progress(s.id), doneIds = h ? h.items.map(x => x.eid) : [];
       return {
-        num: String(si + 1).padStart(2, '0'), title: s.focus || 'Sin enfoque', focus: `SESIÓN ${si + 1} · ${s.ex.length} EJERCICIOS`,
-        lastTxt: p.any ? 'EN CURSO' : h ? rel(h.date).toUpperCase() : 'SIN REGISTRO',
-        score: p.any ? `${p.done}/${p.total}` : h ? `${h.items.length}/${s.ex.length}` : `0/${s.ex.length}`,
-        dots: s.ex.map(e => { const on = p.any ? getSets(d, s.id, e).some(x => x.on) : doneIds.includes(e.id); return { bg: on ? C.ink : 'transparent' }; }),
+        num: String(si + 1).padStart(2, '0'), title: s.focus || 'Sin enfoque', focus: `${s.ex.length} EJERCICIOS`,
+        lastTxt: p.any ? 'En curso' : h ? cap(rel(h.date)) : 'Sin registro', lastColor: p.any ? C.acc : '#bbb',
+        dots: s.ex.map(e => { const on = p.any ? getSets(d, s.id, e).some(x => x.on) : doneIds.includes(e.id); return { bg: on ? C.text : 'transparent', border: on ? C.text : '#555' }; }),
         numColor: s.id === nextSid ? C.acc : '#bbb',
         onOpen: () => this.go('session', { sid: s.id })
       };
     });
 
-    // Body weight
     const bodyS = [...d.body].sort((a, b) => a.date.localeCompare(b.date));
     const bLast = bodyS[bodyS.length - 1], bPrev = bodyS[bodyS.length - 2];
     const logged = !!bLast && weekKey(bLast.date) === weekKey(now);
-    const bTail = bodyS.slice(-8), bSp = bTail.length >= 2 ? spark(bTail.map(b => b.kg), 120, 50) : null;
+    const bTail = bodyS.slice(-8), bSp = bTail.length >= 2 ? spark(bTail.map(b => b.kg), 300, 60) : null;
     let bodyDelta = '';
     if (bLast && bPrev) { const df = Math.round((bLast.kg - bPrev.kg) * 10) / 10; bodyDelta = `${df > 0 ? '+' : df < 0 ? '−' : '±'}${fkg(Math.abs(df))} kg vs ${dm(bPrev.date)}`; }
 
-    // Session
     const s = findSess(d, st.sid) || S[0], sid = s.id, sp = progress(sid);
     const sLast = hist.find(x => x.sid === sid);
+    const segs = st.screen !== 'session' ? [] : s.ex.map(e => { const { c, len } = exProg(sid, e); return { bg: c >= len ? C.acc : c > 0 ? '#6b2410' : 'transparent', border: c > 0 ? C.acc : '#444' }; });
     const exercises = st.screen !== 'session' ? [] : s.ex.map((ex, i) => {
       const id = ex.id, n = ex.sets;
       const vars = d.variants[id], si = Math.min(d.sel[id] || 0, vars.length - 1), v = vars[si];
@@ -921,23 +1013,28 @@ class Component extends DCLogic {
       const lfSame = (() => { for (const h of hist) { const it = h.items.find(x => x.eid === id && x.v === v.n); if (it) return it; } return null; })();
       const pts = open ? hist.filter(h => h.items.some(x => x.eid === id && x.v === v.n)).slice(0, 10).reverse().map(h => ({ date: h.date, kg: h.items.find(x => x.eid === id).kg })) : [];
       const sp2 = pts.length >= 2 ? spark(pts.map(p => p.kg), 300, 80) : null;
+      const upKg = lfSame && v.kg > lfSame.kg;
       return {
-        id, idx: String(i + 1).padStart(2, '0'), name: ex.name || 'SIN NOMBRE', scheme: `${n} × ${ex.reps}`,
-        meta: `${n} × ${ex.reps} · ${v.n.toUpperCase()}`, equip: v.n, equipUp: v.n.toUpperCase(),
-        kg: v.kg ? fkg(v.kg) : '—', prevTxt: !lfSame ? 'NUEVO' : v.kg > lfSame.kg ? `▲ +${fkg(v.kg - lfSame.kg)}` : v.kg < lfSame.kg ? `▼ −${fkg(lfSame.kg - v.kg)}` : 'IGUAL',
+        id, idx: String(i + 1).padStart(2, '0'), name: ex.name || 'Sin nombre', scheme: `${n} × ${ex.reps}`,
+        equip: v.n, equipUp: v.n.toUpperCase(),
+        kg: v.kg ? fkg(v.kg) : '—',
+        hasPrev: !!lfSame && v.kg !== lfSame.kg,
+        prevTxt: !lfSame || v.kg === lfSame.kg ? '' : upKg ? `▲ +${fkg(v.kg - lfSame.kg)} kg` : `▼ −${fkg(lfSame.kg - v.kg)} kg`,
+        prevColor: upKg ? C.up : C.muted,
         kgInput: draft ?? (v.kg ? fkg(v.kg) : ''), stepTxt: fkg(step),
         done, partial: c > 0 && !done, none: c === 0, countTxt: `${c}/${sets.length}`,
-        nameColor: done ? C.muted : C.text, border: open ? '#3a3a3a' : C.line, radius: open ? '30px' : '42px',
-        open, perSet, note, hasNote: !!note,
+        nameColor: done ? C.muted : C.text, border: open ? C.acc : C.line, bg: open ? '#24140e' : '#111',
+        ring: open ? C.acc : '#8a8a8a', panelOp: done ? '0.4' : '1', metaColor: open ? '#ff8a66' : C.muted,
+        open, perSet, note, hasNote: !!note, showTapHint: !d.seenTap,
         onNote: ev => this.setNote(id, ev.target.value),
         hasChart: !!sp2, noChart: !sp2,
         chartPts: sp2 ? sp2.pts : '', chartX: sp2 ? sp2.x : '0%', chartY: sp2 ? sp2.y : '0%',
         chartLast: sp2 ? fkg(pts[pts.length - 1].kg) : '', chartMax: sp2 ? `MÁX ${fkg(sp2.mx)} · MÍN ${fkg(sp2.mn)}` : '',
-        chartFrom: sp2 ? dm(pts[0].date) : '', chartTo: sp2 ? dm(pts[pts.length - 1].date) : '', chartCount: sp2 ? `${pts.length} ENTRENOS` : '',
+        chartFrom: sp2 ? dm(pts[0].date) : '', chartTo: sp2 ? dm(pts[pts.length - 1].date) : '', chartCount: sp2 ? `${pts.length} entrenos` : '',
         lastTxt: lf ? `Última vez: ${fkg(lf.kg)} kg · ${lf.v} · ${rel(lf.date)} · ${repsTxt(lf)}` : 'Sin registros anteriores',
-        chips: vars.map((vv, j) => ({ label: vv.n.toUpperCase(), kg: vv.kg ? fkg(vv.kg) : '—', sel: j === si, unsel: j !== si, onPick: () => this.pickVar(id, j) })),
+        chips: vars.map((vv, j) => ({ label: vv.n, kg: vv.kg ? fkg(vv.kg) : '—', sel: j === si, unsel: j !== si, onPick: () => this.pickVar(id, j) })),
         canRemove: vars.length > 1, adding: st.adding === id, notAdding: st.adding !== id,
-        presets: PRESETS.filter(p => !vars.some(x => x.n.toLowerCase() === p.toLowerCase())).map(p => ({ label: p.toUpperCase(), onAdd: () => this.addVar(id, p) })),
+        presets: PRESETS.filter(p => !vars.some(x => x.n.toLowerCase() === p.toLowerCase())).map(p => ({ label: p, onAdd: () => this.addVar(id, p) })),
         newVar: st.newVar,
         onNewVar: ev => this.setState({ newVar: ev.target.value }),
         onNewKey: ev => { if (ev.key === 'Enter') this.addVar(id, this.state.newVar); },
@@ -946,17 +1043,25 @@ class Component extends DCLogic {
         onAddCancel: () => this.setState({ adding: null, newVar: '' }),
         onRemove: () => this.removeVar(id),
         setsList: sets.map((x, k) => {
-          const prev = lf && lf.reps ? lf.reps[k] : null;
+          const prev = lf && lf.reps ? lf.reps[k] : null, stop = fn => e => { e.stopPropagation(); fn(); };
+          const hint = x.on ? 'Hecha' : prev != null ? `Antes ${prev} reps` : '';
           return {
-            n: k + 1, on: x.on, off: !x.on, r: String(x.r), canRemove: sets.length > 1,
-            label: k >= n ? `EXTRA ${k + 1}` : `SERIE ${k + 1}`, hint: prev != null ? `ANT ${prev}` : '',
-            repColor: x.on ? C.text : '#bbb',
+            n: k + 1, on: x.on, off: !x.on, r: String(x.r),
+            label: k >= n ? `Extra ${k + 1}` : `Serie ${k + 1}`, hint, hasHint: !!hint,
+            aria: x.on ? `Serie ${k + 1} hecha, tocá para desmarcar` : `Marcar serie ${k + 1}`,
+            bg: x.on ? '#3a1a0e' : '#1a1a1a', border: x.on ? C.acc : '#2c2c2c',
+            circleBg: x.on ? C.acc : '#252525', circleBorder: x.on ? C.acc : '#5a5a5a', circleColor: x.on ? C.ink : '#ddd',
+            labelColor: x.on ? '#ff8a66' : C.text, hintColor: x.on ? '#ff8a66' : C.muted,
+            repColor: x.on ? C.text : '#ccc',
             onTap: () => this.toggleSet(sid, ex, k),
-            onMinus: () => this.repBump(sid, ex, k, -1), onPlus: () => this.repBump(sid, ex, k, 1),
-            onRemove: () => this.removeSet(sid, ex, k)
+            onMinus: stop(() => this.repBump(sid, ex, k, -1)), onPlus: stop(() => this.repBump(sid, ex, k, 1))
           };
         }),
-        canAddSet: sets.length < 5, setCountTxt: String(sets.length), onAddSet: () => this.addSet(sid, ex),
+        canRemoveSet: sets.length > 1, onRemoveSet: () => this.removeLastSet(sid, ex),
+        moreOpen: st.more === id, moreRot: st.more === id ? '180deg' : '0deg',
+        moreLabel: note ? 'PROGRESO Y NOTA ·' : 'PROGRESO Y NOTA',
+        onMore: () => this.setState({ more: st.more === id ? null : id }),
+        canAddSet: sets.length < 5, onAddSet: () => this.addSet(sid, ex),
         onCheck: () => this.toggleAll(sid, ex),
         onOpen: () => this.setState({ open: open ? null : id, adding: null }),
         onMinus: () => this.bump(id, -step), onPlus: () => this.bump(id, step),
@@ -967,24 +1072,22 @@ class Component extends DCLogic {
     });
     const r = st.rest, left = r ? Math.max(0, Math.ceil((r.end - Date.now()) / 1000)) : 0;
 
-    // History
     const history = st.screen !== 'history' ? [] : hist.map(h => {
       const hs = findSess(d, h.sid), dt = new Date(h.date), open = st.histOpen === h.id, n = ago(h.date);
-      const total = hs ? hs.ex.length : h.items.length, focus = (hs ? hs.focus : h.focus) || '';
+      const total = hs ? hs.ex.length : h.items.length, focus = (hs ? hs.focus : h.focus) || '', full = h.items.length >= total;
       return {
         dow: DOW[dt.getDay()], day: String(dt.getDate()), title: focus || `Sesión ${sNum(d, h.sid)}`,
         sub: `SESIÓN ${sNum(d, h.sid)} · ${n < 7 ? rel(h.date).toUpperCase() : dm(h.date)}`,
-        score: `${h.items.length}/${total}`, scoreBg: h.items.length >= total ? C.acc : C.panel, open, radius: open ? '30px' : '42px',
+        score: `${h.items.length}/${total}`, scoreBg: full ? C.acc : '#2c2c2c', scoreColor: full ? C.ink : C.text, open,
         items: h.items.map(it => ({ name: it.name, detail: `${fkg(it.kg)} kg · ${it.v} · ${repsTxt(it)}` })),
         onToggle: () => this.setState({ histOpen: open ? null : h.id })
       };
     });
 
-    // Edit
     const es = findSess(d, st.editSid) || S[0], esPos = S.indexOf(es);
     const editEx = st.screen !== 'edit' ? [] : es.ex.map((e, i) => ({
       idx: String(i + 1).padStart(2, '0'), name: e.name, reps: e.reps, sets: String(e.sets),
-      onName: ev => { const v = ev.target.value; this.editUpd(s2 => { const x = s2.ex.find(y => y.id === e.id); if (x) x.name = v.toUpperCase(); }); },
+      onName: ev => { const v = ev.target.value; this.editUpd(s2 => { const x = s2.ex.find(y => y.id === e.id); if (x) x.name = v; }); },
       onReps: ev => { const v = ev.target.value; this.editUpd(s2 => { const x = s2.ex.find(y => y.id === e.id); if (x) x.reps = v; }); },
       onSetsMinus: () => this.editUpd(s2 => { const x = s2.ex.find(y => y.id === e.id); if (x) x.sets = Math.max(1, x.sets - 1); }),
       onSetsPlus: () => this.editUpd(s2 => { const x = s2.ex.find(y => y.id === e.id); if (x) x.sets = Math.min(5, x.sets + 1); }),
@@ -995,28 +1098,35 @@ class Component extends DCLogic {
 
     return {
       isHome: st.screen === 'home', isSession: st.screen === 'session', isHistory: st.screen === 'history', isEdit: st.screen === 'edit',
-      todayDow: DOW[now.getDay()], todayDate: `${MES[now.getMonth()]}.${now.getDate()}`,
-      cornerTxt, week, weekCount: `${weekDone}/6`,
+      todayTxt: `${DOW[now.getDay()]} ${now.getDate()} ${MES[now.getMonth()]}`,
+      menuOpen: st.menu, toggleMenu: () => this.setState({ menu: !this.state.menu }),
+      cornerTxt, week, weekCount: `${weekDone} de 6`,
       nextLabel: inProg ? 'EN CURSO' : (closedToday || (last && ago(last.date) <= 0)) ? 'MAÑANA TOCA' : last ? 'HOY TOCA' : 'PARA EMPEZAR',
       nextNum: sNum(d, nextSid).padStart(2, '0'), nextFocus: nextS.focus || 'Sin enfoque',
-      nextExCount: String(nextS.ex.length), nextSets: inProg ? `${np.sets}/${np.setsTotal}` : String(np.setsTotal),
-      nextLast: nextH ? rel(nextH.date) : '—',
-      nextCta: inProg ? `CONTINUAR · ${np.done}/${np.total}` : `EMPEZAR SESIÓN ${sNum(d, nextSid)}`,
+      nextExCount: inProg ? `${np.done}/${np.total}` : String(nextS.ex.length), stat1Label: inProg ? 'HECHOS' : 'EJERCICIOS', stat3Label: inProg ? 'EMPEZASTE' : 'ÚLTIMA VEZ', nextSets: inProg ? `${np.sets}/${np.setsTotal}` : String(np.setsTotal),
+      nextLast: inProg && d.active[nextSid] ? hhmm(d.active[nextSid].start) : nextH ? rel(nextH.date) : '—',
+      nextCta: inProg ? 'CONTINUAR' : `EMPEZAR SESIÓN ${sNum(d, nextSid)}`,
       startNext: () => this.go('session', { sid: nextSid }),
       sessions,
       bodyTag: logged ? 'SEMANA ✓' : 'PENDIENTE', bodyTagColor: logged ? '#bbb' : C.acc,
       bodyLabel: logged ? 'ESTA SEMANA' : bLast ? `ÚLTIMO · ${dm(bLast.date)}` : 'SIN REGISTROS',
       bodyKg: bLast ? fkg(bLast.kg) : '—', bodyDelta,
-      bodyHasChart: !!bSp, bodyPts: bSp ? bSp.pts : '', bodyFrom: bSp ? dm(bTail[0].date) : '', bodyTo: bSp ? dm(bTail[bTail.length - 1].date) : '',
-      bodyShowInput: !logged || st.bodyEdit, bodyShowEdit: logged && !st.bodyEdit,
+      bodyHasChart: !!bSp, bodyPts: bSp ? bSp.pts : '', bodyX: bSp ? bSp.x : '0%', bodyY: bSp ? bSp.y : '0%',
+      bodyFrom: bSp ? dm(bTail[0].date) : '', bodyTo: bSp ? dm(bTail[bTail.length - 1].date) : '',
+      bodyShowInput: st.bodyEdit, bodyShowAdd: !logged && !st.bodyEdit, bodyShowEdit: logged && !st.bodyEdit,
+      bodyCancel: () => this.setState({ bodyEdit: false, bodyDraft: null }),
       bodyInput: st.bodyDraft ?? (bLast ? fkg(bLast.kg) : ''),
       bodyChange: ev => this.setState({ bodyDraft: ev.target.value }),
       bodyMinus: () => this.bodyBump(-0.1), bodyPlus: () => this.bodyBump(0.1),
       bodySave: () => this.bodySave(), bodyOpen: () => this.setState({ bodyEdit: true }),
-      sTitle: `SESIÓN ${sNum(d, sid)}`, sFocus: (s.focus || 'Sin enfoque').toUpperCase(), sLastTxt: sLast ? `Última vez ${rel(sLast.date)}` : 'Primera vez',
-      sDone: String(sp.done), sTotal: String(sp.total), sSets: `${sp.sets}/${sp.setsTotal}`,
-      sPct: `${Math.min(100, Math.round(sp.sets / sp.setsTotal * 100))}%`, sEmpty: s.ex.length === 0,
-      exercises, canFinish: sp.any > 0, cantFinish: sp.any === 0, finish: () => this.finish(),
+      sMeta: `SESIÓN ${sNum(d, sid)} · ${sLast ? 'ÚLTIMA: ' + rel(sLast.date).toUpperCase() : 'PRIMERA VEZ'}`,
+      sFocus: s.focus || 'Sin enfoque', sCount: `${sp.done}/${sp.total}`, segs, sEmpty: s.ex.length === 0,
+      exercises, canFinish: sp.any > 0, cantFinish: sp.any === 0,
+      slideTrack: this.slideTrack,
+      slideX: `${st.slideX || 0}px`, slideFill: (st.slideDone || (st.slideX || 0) >= this.slideMax() - 1) ? '100%' : `${(st.slideX || 0) + 58}px`,
+      slideTrans: st.sliding ? 'none' : 'transform .25s ease, width .25s ease',
+      slideTextOp: String(Math.max(0, 1 - (st.slideX || 0) / (this.slideMax() * 0.6))),
+      slideDown: e => this.slideDown(e), slideMove: e => this.slideMove(e), slideUp: e => this.slideUp(e),
       restOn: !!r && left > 0, restDone: !!r && left <= 0, restTxt: mmss(left),
       restPct: r ? `${Math.min(100, left / r.total * 100)}%` : '0%',
       restMinus: () => this.restAdd(-15), restPlus: () => this.restAdd(15), restStop: () => this.setState({ rest: null }),
@@ -1028,7 +1138,6 @@ class Component extends DCLogic {
       onApplyImport: () => this.applyBackup(), onCancelImport: () => this.setState({ pendingImport: null }),
       resetLabel: st.confirmReset ? 'Tocá de nuevo para borrar todo' : 'Borrar historial, pesos y notas',
       resetColor: st.confirmReset ? C.acc : C.muted,
-      editCount: `${S.length} SES`,
       editTabs: S.map((x, i) => ({ label: `S${i + 1}`, sel: x.id === es.id, unsel: x.id !== es.id, onPick: () => this.setState({ editSid: x.id, confirmDelEx: null, confirmDelSess: false }) })),
       editTitle: `SESIÓN ${esPos + 1}`, editFocus: es.focus,
       onEditFocus: ev => { const v = ev.target.value; this.editUpd(s2 => { s2.focus = v; }); },
@@ -1038,7 +1147,7 @@ class Component extends DCLogic {
       delSessColor: st.confirmDelSess ? C.acc : C.muted,
       goHome: () => this.go('home'), goHistory: () => this.go('history'),
       goEdit: () => this.go('edit', { editSid: (findSess(d, st.editSid) || S[0]).id }),
-      hasToast: !!st.toast, toast: st.toast || ''
+      hasToast: !!st.toast, toast: st.toast || '', hasUndo: !!st.undo, onUndo: () => this.doUndo()
     };
   }
 }
