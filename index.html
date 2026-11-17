@@ -479,6 +479,9 @@ setInterval(function(){ if (!document.querySelector('link[rel=manifest]')) { var
             <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
               <span style="font-size:18px;font-weight:600;line-height:1.15;letter-spacing:-.01em;text-wrap:pretty">{{ h.title }}</span>
               <span style="font-family:'Space Mono',monospace;font-size:12px;color:#9a9a9a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ h.sub }}</span>
+              <sc-if value="{{ h.auto }}">
+                <span style="font-size:13px;color:#ff8a66">Guardada sola</span>
+              </sc-if>
             </span>
             <span style="flex:none;min-width:64px;height:48px;margin-right:6px;padding:0 10px;border-radius:10px;background:{{ h.scoreBg }};color:{{ h.scoreColor }};display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:15px;font-weight:700">{{ h.score }}</span>
           </button>
@@ -490,6 +493,7 @@ setInterval(function(){ if (!document.querySelector('link[rel=manifest]')) { var
                   <span style="font-family:'Space Mono',monospace;font-size:12px;color:#9a9a9a">{{ it.detail }}</span>
                 </div>
               </sc-for>
+              <button onClick="{{ h.onDelete }}" style="align-self:flex-start;min-height:44px;margin-top:4px;border:0;background:transparent;padding:0;font-size:14px;color:#9a9a9a;text-decoration:underline;cursor:pointer">Borrar este entreno</button>
             </div>
           </sc-if>
         </article>
@@ -717,8 +721,43 @@ function load() {
   let d = null;
   try { d = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
   if (!d || !d.variants) { d = build(!(typeof window !== 'undefined' && window.__GYM_REAL)); persist(d); }
-  return normalize(d);
+  normalize(d);
+  startupClosed = closeStale(d);
+  if (startupClosed.length) persist(d);
+  return d;
 }
+// Una sesión sin actividad hace más de 4 h se da por terminada (se guarda con la fecha en que se hizo).
+const STALE_MS = 4 * 3600000;
+let startupClosed = [];
+const lastAct = a => (a && (a.last || a.start)) || '';
+function itemsFor(d, sid) {
+  const s = findSess(d, sid);
+  if (!s) return [];
+  return s.ex.map(e => {
+    const on = getSets(d, sid, e).filter(x => x.on), v = d.variants[e.id][d.sel[e.id] || 0];
+    return { eid: e.id, name: e.name, v: v.n, kg: v.kg, sets: on.length, of: e.sets, reps: on.map(x => x.r) };
+  }).filter(x => x.sets > 0);
+}
+function staleIds(d, now) {
+  return Object.keys(d.active || {}).filter(k => { const t = Date.parse(lastAct(d.active[k])); return isNaN(t) || now - t > STALE_MS; });
+}
+function closeStale(d, now = Date.now()) {
+  const saved = [];
+  staleIds(d, now).forEach(k => {
+    const sid = isNaN(+k) ? k : +k, s = findSess(d, sid), a = d.active[k];
+    const items = s ? itemsFor(d, sid) : [];
+    if (items.length) {
+      const date = lastAct(a) || new Date(now).toISOString();
+      d.history.push({ id: 'h' + Date.parse(date) + 's' + sid, sid, focus: s.focus, date, items, auto: true });
+      saved.push({ sid, date });
+    }
+    delete d.active[k];
+  });
+  return saved;
+}
+const staleMsg = (d, saved) => saved.length === 1
+  ? `SESIÓN ${sNum(d, saved[0].sid)} DEL ${DOW[new Date(saved[0].date).getDay()]} QUEDÓ GUARDADA`
+  : `${saved.length} SESIONES SIN TERMINAR GUARDADAS`;
 function normalize(d) {
   const demoish = (d.history || []).some(h => /^h\d$/.test(h.id));
   if (!d.plan) d.plan = seedPlan();
@@ -760,7 +799,19 @@ class Component extends DCLogic {
       setTimeout(() => { this.setState({ slideX: 0, slideDone: false }); this.finish(); }, 260);
     } else this.setState({ sliding: false, slideX: 0 });
   }
-  componentDidMount() { this._iv = setInterval(() => this.tick(), 500); }
+  componentDidMount() {
+    this._iv = setInterval(() => this.tick(), 500);
+    this._stc = Date.now();
+    if (startupClosed.length) { this.flash(staleMsg(this.state.data, startupClosed)); startupClosed = []; }
+  }
+  checkStale() {
+    const now = Date.now(), d = this.state.data;
+    if (!staleIds(d, now).length) return;
+    const probe = JSON.parse(JSON.stringify(d)), saved = closeStale(probe, now);
+    persist(probe);
+    this.setState({ data: probe, open: null, more: null });
+    if (saved.length) this.flash(staleMsg(probe, saved));
+  }
   componentWillUnmount() { clearTimeout(this._t); clearInterval(this._iv); this.wakeOff(); }
 
   wakeSync() {
@@ -777,6 +828,7 @@ class Component extends DCLogic {
 
   tick() {
     try { if (!this._wlFailAt || Date.now() - this._wlFailAt > 5000) this.wakeSync(); } catch (e) {}
+    if (Date.now() - (this._stc || 0) > 60000) { this._stc = Date.now(); this.checkStale(); }
     const r = this.state.rest;
     if (!r) return;
     const left = r.end - Date.now();
@@ -806,7 +858,7 @@ class Component extends DCLogic {
   }
 
   setsUpd(sid, exId, fn) {
-    this.upd(d => { const s = findSess(d, sid), ex = s && s.ex.find(e => e.id === exId); if (!ex) return; const a = this.ensureActive(d, sid); const arr = getSets(d, sid, ex); fn(arr); a.sets[exId] = arr; });
+    this.upd(d => { const s = findSess(d, sid), ex = s && s.ex.find(e => e.id === exId); if (!ex) return; const a = this.ensureActive(d, sid); const arr = getSets(d, sid, ex); fn(arr); a.sets[exId] = arr; a.last = new Date().toISOString(); });
   }
   toggleSet(sid, ex, k) {
     const was = getSets(this.state.data, sid, ex)[k].on;
@@ -851,16 +903,19 @@ class Component extends DCLogic {
     this.upd(d => {
       const a = d.active[sid], s = findSess(d, sid);
       if (!a || !s) return;
-      const items = s.ex.map(e => {
-        const on = getSets(d, sid, e).filter(x => x.on), v = d.variants[e.id][d.sel[e.id] || 0];
-        return { eid: e.id, name: e.name, v: v.n, kg: v.kg, sets: on.length, of: e.sets, reps: on.map(x => x.r) };
-      }).filter(x => x.sets > 0);
+      const items = itemsFor(d, sid);
       if (items.length) d.history.push({ id: 'h' + Date.now(), sid, focus: s.focus, date: new Date().toISOString(), items });
       delete d.active[sid];
     });
     this.setState({ rest: null });
     this.go('home');
     this.flash(`SESIÓN ${sNum(this.state.data, sid)} GUARDADA`, { data: snap, screen: 'session', sid });
+  }
+  delHistory(hid) {
+    const snap = JSON.stringify(this.state.data);
+    this.upd(d => { d.history = d.history.filter(h => h.id !== hid); });
+    this.setState({ histOpen: null });
+    this.flash('ENTRENO BORRADO', { data: snap });
   }
   reset() {
     if (!this.state.confirmReset) { this.setState({ confirmReset: true }); return; }
@@ -899,6 +954,7 @@ class Component extends DCLogic {
     if (!d) return;
     const snap = JSON.stringify(this.state.data);
     const data = normalize(JSON.parse(JSON.stringify(d)));
+    closeStale(data);
     persist(data);
     this.setState({ data, pendingImport: null, histOpen: null, drafts: {}, confirmReset: false });
     this.flash('BACKUP CARGADO', { data: snap });
@@ -1077,7 +1133,8 @@ class Component extends DCLogic {
       const total = hs ? hs.ex.length : h.items.length, focus = (hs ? hs.focus : h.focus) || '', full = h.items.length >= total;
       return {
         dow: DOW[dt.getDay()], day: String(dt.getDate()), title: focus || `Sesión ${sNum(d, h.sid)}`,
-        sub: `SESIÓN ${sNum(d, h.sid)} · ${n < 7 ? rel(h.date).toUpperCase() : dm(h.date)}`,
+        sub: `SESIÓN ${sNum(d, h.sid)} · ${n < 7 ? rel(h.date).toUpperCase() : dm(h.date)}`, auto: !!h.auto,
+        onDelete: () => this.delHistory(h.id),
         score: `${h.items.length}/${total}`, scoreBg: full ? C.acc : '#2c2c2c', scoreColor: full ? C.ink : C.text, open,
         items: h.items.map(it => ({ name: it.name, detail: `${fkg(it.kg)} kg · ${it.v} · ${repsTxt(it)}` })),
         onToggle: () => this.setState({ histOpen: open ? null : h.id })
