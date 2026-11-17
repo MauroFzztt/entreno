@@ -44,7 +44,7 @@ setInterval(function(){ if (!document.querySelector('link[rel=manifest]')) { var
   <main data-screen-label="Inicio" style="flex:1;display:flex;flex-direction:column;gap:20px;padding:16px 14px 40px">
     <header style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:8px">
       <span style="justify-self:start;padding:6px 10px;background:#111;border:1px solid #333;border-radius:10px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.1em;color:#bbb;white-space:nowrap">{{ todayTxt }}</span>
-      <h1 style="margin:0;text-align:center;font-family:'Space Mono',monospace;font-size:19px;font-weight:700;letter-spacing:.22em">ENTRENO</h1>
+      <h1 style="margin:0;text-align:center;font-family:'Space Mono',monospace;font-size:19px;font-weight:700;letter-spacing:.22em;white-space:nowrap;position:relative">ENTRENO<span style="position:absolute;left:100%;top:1px;font-size:11px;font-weight:400;letter-spacing:.04em;color:#9a9a9a">{{ appVersion }}</span></h1>
       <div style="justify-self:end;position:relative">
         <button onClick="{{ toggleMenu }}" aria-label="Más opciones" style="width:44px;height:44px;border-radius:10px;border:1px solid #333;background:#111;color:#ccc;display:flex;align-items:center;justify-content:center;cursor:pointer">
           <svg width="20" height="20" viewBox="0 0 24 24" style="fill:currentColor"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg>
@@ -614,6 +614,7 @@ setInterval(function(){ if (!document.querySelector('link[rel=manifest]')) { var
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:412,&quot;height&quot;:880},&quot;descanso&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;0&quot;,&quot;60&quot;,&quot;90&quot;,&quot;120&quot;,&quot;180&quot;],&quot;default&quot;:&quot;90&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;label&quot;:&quot;Descanso (seg, 0 = apagado)&quot;},&quot;paso&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;1&quot;,&quot;2.5&quot;,&quot;5&quot;],&quot;default&quot;:&quot;2.5&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;label&quot;:&quot;Salto de peso (kg)&quot;},&quot;marcado&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;series&quot;,&quot;ejercicio&quot;],&quot;default&quot;:&quot;series&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;label&quot;:&quot;Marcar por&quot;}}">
 const KEY = 'gym-mauro-v3';
+const APP_VERSION = '5.2'; // build-android.ps1 lo reemplaza con el contenido de VERSION
 const DAY = 86400000;
 const C = { up: '#3DDC97', acc: '#FF3D0A', ink: '#111', text: '#F2F2F2', muted: '#9a9a9a', panelInk: '#1d2328', line: '#2c2c2c', panel: '#8E9BA5' };
 const SEED = [
@@ -1155,7 +1156,7 @@ class Component extends DCLogic {
 
     return {
       isHome: st.screen === 'home', isSession: st.screen === 'session', isHistory: st.screen === 'history', isEdit: st.screen === 'edit',
-      todayTxt: `${DOW[now.getDay()]} ${now.getDate()} ${MES[now.getMonth()]}`,
+      todayTxt: `${DOW[now.getDay()]} ${now.getDate()} ${MES[now.getMonth()]}`, appVersion: `V${APP_VERSION}`,
       menuOpen: st.menu, toggleMenu: () => this.setState({ menu: !this.state.menu }),
       cornerTxt, week, weekCount: `${weekDone} de 6`,
       nextLabel: inProg ? 'EN CURSO' : (closedToday || (last && ago(last.date) <= 0)) ? 'MAÑANA TOCA' : last ? 'HOY TOCA' : 'PARA EMPEZAR',
